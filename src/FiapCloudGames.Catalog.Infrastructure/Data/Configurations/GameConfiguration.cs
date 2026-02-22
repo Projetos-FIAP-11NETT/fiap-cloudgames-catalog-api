@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Configurations;
+namespace FiapCloudGames.Catalog.Infrastructure.Data.Configurations;
 
 public class GameConfiguration : IEntityTypeConfiguration<Game>
 {
