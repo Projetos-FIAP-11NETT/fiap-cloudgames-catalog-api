@@ -4,4 +4,5 @@
   <Project Path="FiapCloudGames.Catalog.Domain/FiapCloudGames.Catalog.Domain.csproj" />
   <Project Path="FiapCloudGames.Catalog.Infrastructure/FiapCloudGames.Catalog.Infrastructure.csproj" />
   <Project Path="FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj" />
+  <Project Path="FiapCloudGames.Queue/FiapCloudGames.Queue.csproj" />
 </Solution>
