@@ -6,11 +6,18 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Commands\" />
+    <Folder Include="CategoryFeature\Commands\DeleteCategory\" />
+    <Folder Include="CategoryFeature\Commands\GetCategory\" />
+    <Folder Include="CategoryFeature\Commands\UpdateCategory\" />
     <Folder Include="DTOs\" />
     <Folder Include="Handlers\" />
     <Folder Include="Queries\" />
     <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.0.0" />
   </ItemGroup>
 
   <PropertyGroup>
