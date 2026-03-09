@@ -5,11 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Behaviors\" />
-    <Folder Include="CategoryFeature\Commands\DeleteCategory\" />
-    <Folder Include="CategoryFeature\Commands\GetCategory\" />
-    <Folder Include="CategoryFeature\Commands\UpdateCategory\" />
+    <Folder Include="CategoryFeature\Queries\" />
     <Folder Include="DTOs\" />
+    <Folder Include="GameFeature\" />
     <Folder Include="Handlers\" />
     <Folder Include="Queries\" />
     <Folder Include="Validators\" />
