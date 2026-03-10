@@ -3,6 +3,7 @@ using FiapCloudGames.Catalog.Api.Middlewares;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
 using FiapCloudGames.Catalog.Infrastructure.Configurations;
 using FiapCloudGames.Catalog.Infrastructure.Data;
+using FiapCloudGames.Queue.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,15 +31,14 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddQueueConfig(builder.Configuration);
+
 builder.Services.AddSwaggerConfig();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwaggerConfig();
-}
+app.UseSwaggerConfig();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

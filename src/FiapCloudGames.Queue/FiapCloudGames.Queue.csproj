@@ -5,17 +5,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    <ItemGroup>
+        <PackageReference Include="MassTransit" Version="8.5.8" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.8" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.3" />
+    </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\FiapCloudGames.Catalog.Application\FiapCloudGames.Catalog.Application.csproj" />
       <ProjectReference Include="..\FiapCloudGames.Catalog.Domain\FiapCloudGames.Catalog.Domain.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Configurations\" />
       <Folder Include="Consumers\" />
-      <Folder Include="Contracts\" />
       <Folder Include="Notifications\" />
-      <Folder Include="Publishers\" />
     </ItemGroup>
 
 </Project>
