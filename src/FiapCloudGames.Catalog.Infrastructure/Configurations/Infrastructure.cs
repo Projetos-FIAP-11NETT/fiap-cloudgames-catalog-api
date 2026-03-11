@@ -14,6 +14,7 @@ public static class Infrastructure
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IGameRepository, GameRepository>();
 
         return services;
     }

@@ -37,6 +37,8 @@ builder.Services.AddSwaggerConfig();
 
 var app = builder.Build();
 
+app.MigrateDatabase();
+
 // Configure the HTTP request pipeline.
 app.UseSwaggerConfig();
 
