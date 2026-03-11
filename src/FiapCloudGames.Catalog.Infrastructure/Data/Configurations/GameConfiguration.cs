@@ -1,4 +1,4 @@
-﻿using FiapCloudGames.Catalog.Domain.Entities;
+using FiapCloudGames.Catalog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +16,25 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
             .IsRequired()
             .HasMaxLength(80);
 
+        builder.Property(g => g.Description)
+            .IsRequired()
+            .HasMaxLength(500);
+
+        builder.Property(g => g.Developer)
+            .IsRequired()
+            .HasMaxLength(80);
+
+        builder.Property(g => g.Price)
+            .IsRequired()
+            .HasPrecision(18, 2);
+
+        builder.Property(g => g.ReleaseDate)
+            .IsRequired();
+
+        builder.HasIndex(g => new { g.Title, g.Developer })
+            .IsUnique()
+            .HasDatabaseName("UQ_Game_Title_Developer");
+
         builder.HasMany(g => g.Categories)
             .WithMany(c => c.Games)
             .UsingEntity<Dictionary<string, object>>(
@@ -28,4 +47,4 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
                     j.ToTable("GameCategory");
                 });
     }
-}
+}

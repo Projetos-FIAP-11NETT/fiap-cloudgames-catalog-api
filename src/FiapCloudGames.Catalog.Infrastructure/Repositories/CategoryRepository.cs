@@ -31,6 +31,11 @@ public class CategoryRepository(AppDbContext dataContext) : Repository<Category>
         return await query.ToListAsync();
     }
 
+    public Task<List<Category>> GetByIdsAsync(IEnumerable<Guid> ids)
+    {
+        return dataContext.Categories.Where(r => ids.Contains(r.Id)).ToListAsync();
+    }
+
     public async Task<Category?> GetCategoryByNameAsync(string name)
     {
         return await dataContext.Categories
