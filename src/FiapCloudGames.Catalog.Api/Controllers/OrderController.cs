@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using FiapCloudGames.Catalog.Application.OrderFeature.Commands.CreateOrder;
+using FiapCloudGames.Catalog.Application.OrderFeature.Queries.GetAllOrders;
+using FiapCloudGames.Catalog.Application.OrderFeature.Queries.GetMyOrders;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,23 @@ public class OrderController
 )
     : ControllerBase
 {
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllAsync()
+    {
+        var result = await mediator.Send(new GetAllOrdersQuery());
+        return Ok(result);
+    }
+
+    [HttpGet("my")]
+    [Authorize(Roles = "Admin,User")]
+    public async Task<IActionResult> GetMyOrdersAsync()
+    {
+        var userId = User.FindFirstValue("user_id");
+        var result = await mediator.Send(new GetMyOrdersQuery(userId!));
+        return Ok(result);
+    }
+
     [HttpPost]
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateOrderRequest request)
