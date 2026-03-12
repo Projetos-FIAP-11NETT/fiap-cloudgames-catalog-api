@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Queue.Configurations.MassTransit;
+﻿using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Queue.Configurations.MassTransit;
 using FiapCloudGames.Queue.Configurations.Rabbitmq;
 using FiapCloudGames.Queue.Publishers;
 using Microsoft.Extensions.Configuration;

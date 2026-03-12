@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Queue.Configurations.Rabbitmq;
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Queue.Configurations.Rabbitmq;
 using FiapCloudGames.Queue.Contracts;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -9,8 +10,8 @@ public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPubli
 {
     private readonly IPublishEndpoint _publishEndpoint = bus;
     private readonly ILogger<OrderPlacedPublisher> _logger = logger;
-    
-    public Task PublishAsync(int orderId, Guid userId, Guid gameId, decimal price, string email, string name,
+
+    public Task PublishAsync(int orderId, string userId, Guid gameId, decimal price, string email, string name,
         CancellationToken cancellationToken = default)
     {
         _logger.LogDebug(
@@ -20,7 +21,7 @@ public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPubli
         return _publishEndpoint.Publish<IOrderPlaced>(new
         {
             OrderId = orderId,
-            UserId =  userId,
+            UserId = userId,
             GameId = gameId,
             Price = price,
             Email = email,

@@ -1,10 +1,10 @@
-﻿namespace FiapCloudGames.Queue.Publishers;
+namespace FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 
 public interface IOrderPlacedPublisher
 {
     Task PublishAsync(
         int orderId,
-        Guid userId,
+        string userId,
         Guid gameId,
         decimal price,
         string email,
