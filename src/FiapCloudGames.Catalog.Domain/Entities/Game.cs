@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Catalog.Domain.Exceptions;
+﻿using System.Text.Json.Serialization;
+using FiapCloudGames.Catalog.Domain.Exceptions;
 using FiapCloudGames.Catalog.Domain.MarkingInterfaces;
 
 namespace FiapCloudGames.Catalog.Domain.Entities;
@@ -11,6 +12,7 @@ public class Game
     public DateTime ReleaseDate { get; private set; }
     public string Developer { get; private set; }
     public decimal Price { get; private set; }
+    [JsonIgnore]
 
     private readonly List<Category> _categories = [];
     public IReadOnlyCollection<Category> Categories => _categories;

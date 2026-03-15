@@ -14,7 +14,7 @@ public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPubli
     public Task PublishAsync(int orderId, Guid userId, Guid gameId, decimal price, string email, string name,
         CancellationToken cancellationToken = default)
     {
-        _logger.LogDebug(
+        _logger.LogInformation(
             "Publishing IOrderPlaced to RabbitMQ: OrderId={OrderId}, User={UserId}, Game={GameId}",
             orderId, userId, gameId);
 

@@ -16,6 +16,7 @@ public static class Infrastructure
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IGameRepository, GameRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<ILibraryItemRepository, LibraryItemRepository>();
 
         return services;
     }

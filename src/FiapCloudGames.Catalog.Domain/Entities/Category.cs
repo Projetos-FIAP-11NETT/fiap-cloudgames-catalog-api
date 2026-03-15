@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Catalog.Domain.Exceptions;
+﻿using System.Text.Json.Serialization;
+using FiapCloudGames.Catalog.Domain.Exceptions;
 
 namespace FiapCloudGames.Catalog.Domain.Entities;
 
@@ -7,6 +8,7 @@ public class Category
     public Guid Id { get; private set; }
     
     public string Name { get; private set; }
+    [JsonIgnore]
     
     private readonly List<Game> _games = [];
     public IReadOnlyCollection<Game> Games => _games;

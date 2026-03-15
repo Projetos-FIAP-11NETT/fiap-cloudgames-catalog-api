@@ -18,6 +18,8 @@ public class OrderRepository(AppDbContext dataContext)
     public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
     {
         return await dataContext.Orders
+            .AsNoTracking()
+            .Include(x=>x.Game)
             .Where(o => o.UserId == userId)
             .ToListAsync();
     }
@@ -27,5 +29,10 @@ public class OrderRepository(AppDbContext dataContext)
         var newOrder =await dataContext.Orders.AddAsync(order);
         await dataContext.SaveChangesAsync();
         return newOrder.Entity.Id;
+    }
+
+    public async Task<Order?> GetOrderByIdAsync(int orderId)
+    {
+        return await dataContext.Orders.AsNoTracking().Include(x=>x.Game).FirstOrDefaultAsync(x=> x.Id == orderId);
     }
 }

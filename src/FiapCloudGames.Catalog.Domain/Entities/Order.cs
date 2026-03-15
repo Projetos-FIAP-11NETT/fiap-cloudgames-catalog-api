@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FiapCloudGames.Catalog.Domain.Enums;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 
@@ -8,6 +9,7 @@ public class Order
     public int Id { get; private set; }
     public Guid UserId { get; private set; }
     public Guid GameId { get; private set; }
+    [JsonIgnore]
     public Game Game { get; private set; }
     public OrderStatus Status { get; private set; }
     public decimal TotalAmount { get; private set; }
@@ -38,5 +40,15 @@ public class Order
 
         if (TotalAmount < 0)
             throw new DomainException("O valor total do pedido não pode ser negativo.");
+    }
+
+    public void UpdateStatus(OrderStatus status)
+    {
+        if (Status == OrderStatus.Rejeitado)
+            throw new DomainException("Não é possível alterar o status de um pedido cancelado");
+        if(Status == OrderStatus.Aprovado)
+            throw new DomainException("Não é possível alterar o status de um pedido já concluído");
+        
+        Status = status;
     }
 }
