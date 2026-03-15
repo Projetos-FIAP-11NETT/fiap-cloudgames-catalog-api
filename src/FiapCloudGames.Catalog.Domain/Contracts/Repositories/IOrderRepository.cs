@@ -6,5 +6,6 @@ namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories;
 public interface IOrderRepository : IRepository<Order>
 {
     Task<List<Order>> GetAllOrdersAsync();
-    Task<List<Order>> GetOrdersByUserIdAsync(string userId);
+    Task<List<Order>> GetOrdersByUserIdAsync(Guid userId);
+    Task<int> AddOrderAsync(Order order);
 }

@@ -11,7 +11,7 @@ public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPubli
     private readonly IPublishEndpoint _publishEndpoint = bus;
     private readonly ILogger<OrderPlacedPublisher> _logger = logger;
 
-    public Task PublishAsync(int orderId, string userId, Guid gameId, decimal price, string email, string name,
+    public Task PublishAsync(int orderId, Guid userId, Guid gameId, decimal price, string email, string name,
         CancellationToken cancellationToken = default)
     {
         _logger.LogDebug(

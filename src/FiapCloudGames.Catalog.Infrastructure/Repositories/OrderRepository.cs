@@ -12,15 +12,20 @@ public class OrderRepository(AppDbContext dataContext)
     public async Task<List<Order>> GetAllOrdersAsync()
     {
         return await dataContext.Orders
-            .Include(o => o.Game)
             .ToListAsync();
     }
 
-    public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
+    public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
     {
         return await dataContext.Orders
-            .Include(o => o.Game)
             .Where(o => o.UserId == userId)
             .ToListAsync();
+    }
+
+    public async Task<int> AddOrderAsync(Order order)
+    {
+        var newOrder =await dataContext.Orders.AddAsync(order);
+        await dataContext.SaveChangesAsync();
+        return newOrder.Entity.Id;
     }
 }

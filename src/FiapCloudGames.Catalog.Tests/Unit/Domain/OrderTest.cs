@@ -6,7 +6,7 @@ namespace FiapCloudGames.Catalog.Tests.Unit.Domain;
 
 public class OrderTest
 {
-    private const string ValidUserId = "pOE8V7IxsSdylVPLGLXEgkjuTTz2";
+    private readonly Guid ValidUserId = Guid.NewGuid();
 
     private static Game ValidGame =>
         new("Game Test", "Descrição válida", new DateTime(2020, 1, 1), "Dev Studio", 49.90m,
@@ -18,17 +18,7 @@ public class OrderTest
     public void MustFailWhenUserIdIsEmpty()
     {
         var exception = Assert.Throws<DomainException>(() =>
-            new Order("", ValidGame)
-        );
-
-        Assert.Equal("UserId inválido. Deve ser informado.", exception.Message);
-    }
-
-    [Fact]
-    public void MustFailWhenUserIdIsWhitespace()
-    {
-        var exception = Assert.Throws<DomainException>(() =>
-            new Order("   ", ValidGame)
+            new Order(Guid.Empty, ValidGame)
         );
 
         Assert.Equal("UserId inválido. Deve ser informado.", exception.Message);
@@ -49,7 +39,7 @@ public class OrderTest
         Assert.Equal(game.Price, order.TotalAmount);
         Assert.Equal(OrderStatus.Pendente, order.Status);
         Assert.Null(order.PaidAt);
-        Assert.NotEqual(Guid.Empty, order.Id);
+        Assert.NotEqual(0, order.Id);
     }
 
     #endregion

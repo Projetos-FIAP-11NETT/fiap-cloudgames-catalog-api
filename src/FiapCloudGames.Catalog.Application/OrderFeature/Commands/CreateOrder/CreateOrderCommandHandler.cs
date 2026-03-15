@@ -17,25 +17,22 @@ public class CreateOrderCommandHandler(
     {
         var game = await gameRepository.GetByIdAsync(command.GameId);
         if (game is null)
-            throw new NotFoundException($"Jogo com Id '{command.GameId}' não encontrado.");
+            throw new BusinessException($"Jogo com Id '{command.GameId}' não encontrado.");
 
         var order = new Order(command.UserId, game);
 
-        await orderRepository.AddAsync(order);
-        var saved = await orderRepository.SaveChangesAsync(cancellationToken);
+        var orderId = await orderRepository.AddOrderAsync(order);
 
-        if (saved)
-        {
-            await orderPlacedPublisher.PublishAsync(
-                order.Id.GetHashCode(),
-                command.UserId,
-                game.Id,
-                game.Price,
-                command.Email,
-                command.Name,
-                cancellationToken);
-        }
+        await orderPlacedPublisher.PublishAsync(
+            orderId,
+            command.UserId,
+            game.Id,
+            game.Price,
+            command.Email,
+            command.Name,
+            cancellationToken);
+        
 
-        return saved;
+        return true;
     }
 }

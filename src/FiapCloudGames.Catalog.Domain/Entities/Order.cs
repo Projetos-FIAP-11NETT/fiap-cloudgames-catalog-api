@@ -5,8 +5,8 @@ namespace FiapCloudGames.Catalog.Domain.Entities;
 
 public class Order
 {
-    public Guid Id { get; private set; }
-    public string UserId { get; private set; }
+    public int Id { get; private set; }
+    public Guid UserId { get; private set; }
     public Guid GameId { get; private set; }
     public Game Game { get; private set; }
     public OrderStatus Status { get; private set; }
@@ -16,9 +16,8 @@ public class Order
 
     private Order() { }
 
-    public Order(string userId, Game game)
+    public Order(Guid userId, Game game)
     {
-        Id = Guid.NewGuid();
         UserId = userId;
         GameId = game.Id;
         Game = game;
@@ -31,7 +30,7 @@ public class Order
 
     public void Validate()
     {
-        if (string.IsNullOrWhiteSpace(UserId))
+        if (UserId == Guid.Empty)
             throw new DomainException("UserId inválido. Deve ser informado.");
 
         if (GameId == Guid.Empty)

@@ -27,7 +27,8 @@ public class OrderController
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> GetMyOrdersAsync()
     {
-        var userId = User.FindFirstValue("user_id");
+        var userIdString = User.FindFirstValue("system_user_id");
+        var userId = Guid.Parse(userIdString!);
         var result = await mediator.Send(new GetMyOrdersQuery(userId!));
         return Ok(result);
     }
@@ -36,7 +37,8 @@ public class OrderController
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateOrderRequest request)
     {
-        var userId = User.FindFirstValue("user_id");
+        var userIdString = User.FindFirstValue("system_user_id");
+        var userId = Guid.Parse(userIdString!);
         var email = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue("email");
         var name = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue("name");
 

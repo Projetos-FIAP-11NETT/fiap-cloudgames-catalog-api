@@ -4,7 +4,7 @@ public interface IOrderPlacedPublisher
 {
     Task PublishAsync(
         int orderId,
-        string userId,
+        Guid userId,
         Guid gameId,
         decimal price,
         string email,
