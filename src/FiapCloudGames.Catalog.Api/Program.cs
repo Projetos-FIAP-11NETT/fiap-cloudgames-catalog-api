@@ -3,6 +3,8 @@ using FiapCloudGames.Catalog.Api.Middlewares;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
 using FiapCloudGames.Catalog.Infrastructure.Configurations;
 using FiapCloudGames.Catalog.Infrastructure.Data;
+using FiapCloudGames.Catalog.Observability.Configurations;
+using FiapCloudGames.Catalog.Observability.Middleware;
 using FiapCloudGames.Queue.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +35,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddQueueConfig(builder.Configuration);
 
+builder.Services.AddObservabilityConfig();
+
 builder.Services.AddSwaggerConfig();
 
 var app = builder.Build();
@@ -43,6 +47,8 @@ app.MigrateDatabase();
 app.UseSwaggerConfig();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseMiddleware<ObservabilityMiddleware>();
 
 app.UseHttpsRedirection();
 

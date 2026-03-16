@@ -1,5 +1,5 @@
 
-# Passo 1: Restore (copia apenas arquivos necess�rios para restore, para aproveitar cache)
+# Passo 1: Restore (copia apenas arquivos necess rios para restore, para aproveitar cache)
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS restore
 WORKDIR /app
@@ -12,11 +12,12 @@ COPY ./src/FiapCloudGames.Catalog.Domain/*.csproj ./FiapCloudGames.Catalog.Domai
 COPY ./src/FiapCloudGames.Catalog.Infrastructure/*.csproj ./FiapCloudGames.Catalog.Infrastructure/
 COPY ./src/FiapCloudGames.Queue/*.csproj ./FiapCloudGames.Queue/
 COPY ./src/FiapCloudGames.Catalog.Tests/*.csproj ./FiapCloudGames.Catalog.Tests/
+COPY ./src/FiapCloudGames.Catalog.Observability/*.csproj ./FiapCloudGames.Catalog.Observability/
 
 
 RUN dotnet restore FiapCloudGames.Catalog.slnx
 
-# Passo 2: Build (copia o c�digo restante e compila, aproveitando cache do restore)
+# Passo 2: Build (copia o c digo restante e compila, aproveitando cache do restore)
 
 FROM restore AS build
 WORKDIR /app
@@ -35,7 +36,7 @@ RUN dotnet test FiapCloudGames.Catalog.slnx \
     --no-build \
     --verbosity normal
 
-# Passo 4: Publish (gera os arquivos de publica��o, aproveitando cache do build)
+# Passo 4: Publish (gera os arquivos de publica  o, aproveitando cache do build)
 
 FROM build AS publish
 RUN dotnet publish FiapCloudGames.Catalog.Api/FiapCloudGames.Catalog.Api.csproj \
@@ -43,7 +44,7 @@ RUN dotnet publish FiapCloudGames.Catalog.Api/FiapCloudGames.Catalog.Api.csproj 
     -o /app/publish \
     --no-build
 
-# Passo 5: Runtime (gera a imagem final, copiando apenas os arquivos de publica��o)
+# Passo 5: Runtime (gera a imagem final, copiando apenas os arquivos de publica  o)
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app

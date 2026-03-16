@@ -20,6 +20,7 @@
     <ProjectReference Include="..\FiapCloudGames.Catalog.Application\FiapCloudGames.Catalog.Application.csproj" />
     <ProjectReference Include="..\FiapCloudGames.Catalog.Infrastructure\FiapCloudGames.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\FiapCloudGames.Catalog.Domain\FiapCloudGames.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\FiapCloudGames.Catalog.Observability\FiapCloudGames.Catalog.Observability.csproj" />
     <ProjectReference Include="..\FiapCloudGames.Queue\FiapCloudGames.Queue.csproj" />
   </ItemGroup>
 

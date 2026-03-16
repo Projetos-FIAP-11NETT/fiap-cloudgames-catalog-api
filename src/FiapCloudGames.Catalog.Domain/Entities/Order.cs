@@ -49,6 +49,8 @@ public class Order
         if(Status == OrderStatus.Aprovado)
             throw new DomainException("Não é possível alterar o status de um pedido já concluído");
         
+        if(status == OrderStatus.Pendente)
+            PaidAt = DateTime.UtcNow;
         Status = status;
     }
 }

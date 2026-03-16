@@ -14,7 +14,7 @@ public static class RabbitmqStartup
             x.AddConsumers(GetConsumers());
 
             x.SetEndpointNameFormatter(
-                new KebabCaseEndpointNameFormatter("notifications", false));
+                new KebabCaseEndpointNameFormatter("catalog", false));
 
             x.UsingRabbitMq((context, cfg) =>
             {

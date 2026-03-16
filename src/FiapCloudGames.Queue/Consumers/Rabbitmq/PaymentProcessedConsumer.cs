@@ -42,13 +42,15 @@ public class PaymentProcessedConsumer(ILogger<PaymentProcessedConsumer> logger, 
                 message.OrderId);
             return;
         }
-        
-        var addGameCommand = new CreateLibraryItemCommand(order.UserId, order.GameId, order.Id);
-        await mediator.Send(addGameCommand);
-
         var updateOrderCommand = new UpdateOrderStatusCommand(order.Id, OrderStatus.Aprovado);
-        await mediator.Send(updateOrderCommand);
-
+        
+        if (await mediator.Send(updateOrderCommand))
+        {
+            var addGameCommand = new CreateLibraryItemCommand(order.UserId, order.GameId, order.Id);
+            await mediator.Send(addGameCommand);
+        }
+        else
+            logger.LogError("[catalog-service] PaymentProcessedConsumer - Order {orderId} - failed to update status.", message.OrderId);
     }
     private async Task ProcessRejectedPayment(IPaymentProcessed message)
     {
