@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using FiapCloudGames.Catalog.Domain.Exceptions;
-using FiapCloudGames.Catalog.Domain.MarkingInterfaces;
 
 namespace FiapCloudGames.Catalog.Domain.Entities;
 

@@ -1,6 +1,5 @@
 ﻿using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.DeleteCategory;
-using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.GetCategory;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.UpdateCategory;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Queries.GetCategory;
 using MediatR;
