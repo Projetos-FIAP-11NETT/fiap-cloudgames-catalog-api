@@ -9,4 +9,4 @@ public sealed record class GetGameQuery
     Guid? Id,
     string? Title
 )
-    : IRequest<IEnumerable<GetGameReponse>>;
+    : IRequest<IEnumerable<GetGameResponse>>;

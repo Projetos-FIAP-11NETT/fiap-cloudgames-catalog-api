@@ -27,7 +27,6 @@ public static class AuthConfig
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
 
-                    //RoleClaimType = "roles"
                 };
             });
     }

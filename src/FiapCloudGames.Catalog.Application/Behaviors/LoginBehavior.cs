@@ -26,7 +26,6 @@ public sealed class LoggingBehavior<TRequest, TResponse>
         var requestName = typeof(TRequest).Name;
         var correlationId = correlation.CorrelationId;
         var stopwatch = Stopwatch.StartNew();
-        //var safeRequest = DataMasker.Mask(request!);
 
         using (LogContext.PushProperty("CorrelationId", correlationId))
         {

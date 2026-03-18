@@ -10,14 +10,14 @@ public class GetGameQueryHandler
     (
         IGameRepository gameRepository
     )
-    : IRequestHandler<GetGameQuery, IEnumerable<GetGameReponse>>
+    : IRequestHandler<GetGameQuery, IEnumerable<GetGameResponse>>
 {
 
-    public async Task<IEnumerable<GetGameReponse>> Handle(GetGameQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetGameResponse>> Handle(GetGameQuery query, CancellationToken cancellationToken)
     {
         var games = await gameRepository.GetGame(query.Id, query.Title);
 
-        return games.Select(x => new GetGameReponse
+        return games.Select(x => new GetGameResponse
         {
             Title = x.Title,
             Categories = x.Categories.Select(x => x.Id).ToList(),

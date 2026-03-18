@@ -1,6 +1,6 @@
 ﻿namespace FiapCloudGames.Catalog.Application.DTOs;
 
-public class GetGameReponse
+public class GetGameResponse
 {
     public Guid Id { get; set; }
     public string Title { get; set; }
