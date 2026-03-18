@@ -74,11 +74,10 @@ ENTRYPOINT ["dotnet", "FiapCloudGames.Catalog.Api.dll"]
 
 
 
-#gera a imagem  projetofiap/catalog-api:1 
-#docker build -f docker/Dockerfile -t projetofiap/catalog-api:1 . 
-#docker run -d -p 8083:8083 --name catalog-api projetofiap/catalog-api:1
+#gera a imagem  projetofiap/catalog-api:latest 
+#docker build -f docker/Dockerfile -t projetofiap/catalog-api:latest . 
+#docker run -d -p 8083:8083 --name catalog-api projetofiap/catalog-api:latest
 
 #docker login -u projetofiap #para se conectar ao Docker Hub 
-#password: Fiap!2026
 
-#docker push projetofiap/catalog-api:1 #sobe imagem para o repositório no Docker Hub
+#docker push projetofiap/catalog-api:latest #sobe imagem para o repositório no Docker Hub
