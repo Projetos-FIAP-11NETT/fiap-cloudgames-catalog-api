@@ -1,0 +1,83 @@
+
+# Passo 1: Restore (copia apenas arquivos necess rios para restore, para aproveitar cache)
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS restore
+WORKDIR /app
+
+COPY ./src/FiapCloudGames.Catalog.slnx ./
+
+COPY ./src/FiapCloudGames.Catalog.Api/*.csproj ./FiapCloudGames.Catalog.Api/
+COPY ./src/FiapCloudGames.Catalog.Application/*.csproj ./FiapCloudGames.Catalog.Application/
+COPY ./src/FiapCloudGames.Catalog.Domain/*.csproj ./FiapCloudGames.Catalog.Domain/
+COPY ./src/FiapCloudGames.Catalog.Infrastructure/*.csproj ./FiapCloudGames.Catalog.Infrastructure/
+COPY ./src/FiapCloudGames.Queue/*.csproj ./FiapCloudGames.Queue/
+COPY ./src/FiapCloudGames.Catalog.Tests/*.csproj ./FiapCloudGames.Catalog.Tests/
+COPY ./src/FiapCloudGames.Catalog.Observability/*.csproj ./FiapCloudGames.Catalog.Observability/
+COPY ./src/FiapCloudGames.Catalog.Shared/*.csproj ./FiapCloudGames.Catalog.Shared/
+
+
+RUN dotnet restore FiapCloudGames.Catalog.slnx
+
+# Passo 2: Build (copia o c digo restante e compila, aproveitando cache do restore)
+
+FROM restore AS build
+WORKDIR /app
+
+COPY ./src/. .
+
+RUN dotnet build FiapCloudGames.Catalog.slnx \
+    -c Release \
+    --no-restore
+
+# Passo 3: Test (rodar testes unitários, aproveitando cache do build)
+
+FROM build AS test
+RUN dotnet test FiapCloudGames.Catalog.slnx \
+    -c Release \
+    --no-build \
+    --verbosity normal
+
+# Passo 4: Publish (gera os arquivos de publica  o, aproveitando cache do build)
+
+FROM build AS publish
+RUN dotnet publish FiapCloudGames.Catalog.Api/FiapCloudGames.Catalog.Api.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-build
+
+# Passo 5: Runtime (gera a imagem final, copiando apenas os arquivos de publica  o)
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+COPY --from=publish /app/publish .
+
+# Passo 5: Instalação do Agent New Relic
+RUN apt-get update && apt-get install -y curl ca-certificates gnupg \
+&& echo 'deb [signed-by=/etc/apt/keyrings/newrelic-apt.gpg] http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
+&& curl -fsSL https://download.newrelic.com/NEWRELIC_APT_2DAD550E.public | gpg --dearmor > /etc/apt/keyrings/newrelic-apt.gpg \
+&& apt-get update \
+&& apt-get install -y newrelic-dotnet-agent \
+&& rm -rf /var/lib/apt/lists/*
+
+COPY --from=publish /app/publish .
+
+# Passo 6: Habilitando o Agent New Relic
+ENV CORECLR_ENABLE_PROFILING=1 \
+CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
+CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
+CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so
+
+EXPOSE 8083
+
+ENTRYPOINT ["dotnet", "FiapCloudGames.Catalog.Api.dll"]
+
+
+
+#gera a imagem  projetofiap/catalog-api:latest 
+#docker build -f docker/Dockerfile -t projetofiap/catalog-api:latest . 
+#docker run -d -p 8083:8083 --name catalog-api projetofiap/catalog-api:latest
+
+#docker login -u projetofiap #para se conectar ao Docker Hub 
+
+#docker push projetofiap/catalog-api:latest #sobe imagem para o repositório no Docker Hub
