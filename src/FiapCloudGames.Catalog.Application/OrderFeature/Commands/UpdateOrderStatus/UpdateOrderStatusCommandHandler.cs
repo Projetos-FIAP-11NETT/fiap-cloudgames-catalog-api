@@ -21,6 +21,9 @@ public class UpdateOrderStatusCommandHandler(IOrderRepository orderRepository)
             case OrderStatus.Rejeitado:
                 order.Rejeitar();
                 break;
+            case OrderStatus.Cancelado:
+                order.Cancelar();
+                break;
             default:
                 return false;
         }

@@ -62,4 +62,13 @@ public class Order
 
         Status = OrderStatus.Rejeitado;
     }
+
+    public void Cancelar()
+    {
+        if (Status == OrderStatus.Cancelado)
+            throw new DomainException("o pedido já foi cancelado");
+        if (Status is not OrderStatus.Pendente)
+            throw new DomainException("Não é possível cancelar pedidos já processados.");
+        Status = OrderStatus.Cancelado;
+    }
 }
