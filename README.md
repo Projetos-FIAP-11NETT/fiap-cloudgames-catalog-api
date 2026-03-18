@@ -97,12 +97,3 @@ Rodar todos os testes:
 dotnet test src/FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj
 ```
 
-Com cobertura (se tiver coverlet configurado):
-
-```bash
-dotnet test src/FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj --collect:"XPlat Code Coverage"
-```
-
-## Licença
-
-Uso acadêmico / FIAP CloudGames.
