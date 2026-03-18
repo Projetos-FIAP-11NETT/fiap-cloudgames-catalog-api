@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Shared.Abstractions;
 using FiapCloudGames.Queue.Configurations.Rabbitmq;
 using FiapCloudGames.Queue.Contracts;
 using MassTransit;
@@ -6,15 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace FiapCloudGames.Queue.Publishers;
 
-public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPublisher> logger) : IOrderPlacedPublisher
+public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPublisher> logger, ICorrelationIdAccessor correlation) : IOrderPlacedPublisher
 {
     private readonly IPublishEndpoint _publishEndpoint = bus;
-    private readonly ILogger<OrderPlacedPublisher> _logger = logger;
 
     public Task PublishAsync(int orderId, Guid userId, Guid gameId, decimal price, string email, string name,
         CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation(
+        logger.LogInformation(
             "Publishing IOrderPlaced to RabbitMQ: OrderId={OrderId}, User={UserId}, Game={GameId}",
             orderId, userId, gameId);
 
@@ -26,6 +26,10 @@ public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPubli
             Price = price,
             Email = email,
             Name = name
-        }, cancellationToken);
+        }, context =>
+        {
+            context.CorrelationId = correlation.CorrelationId;
+        }, 
+            cancellationToken);
     }
 }

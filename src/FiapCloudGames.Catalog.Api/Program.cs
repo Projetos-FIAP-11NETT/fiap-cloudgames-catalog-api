@@ -1,11 +1,15 @@
 using FiapCloudGames.Catalog.Api.Configurations;
 using FiapCloudGames.Catalog.Api.Middlewares;
+using FiapCloudGames.Catalog.Application.Behaviors;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
 using FiapCloudGames.Catalog.Infrastructure.Configurations;
+using FiapCloudGames.Catalog.Infrastructure.Correlation;
 using FiapCloudGames.Catalog.Infrastructure.Data;
 using FiapCloudGames.Catalog.Observability.Configurations;
 using FiapCloudGames.Catalog.Observability.Middleware;
+using FiapCloudGames.Catalog.Shared.Abstractions;
 using FiapCloudGames.Queue.Configurations;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddMediatR(cfg => 
 {
     cfg.RegisterServicesFromAssembly(typeof(CreateCategoryCommand).Assembly);
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -35,6 +40,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddQueueConfig(builder.Configuration);
 
+builder.Services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
+
 builder.Services.AddObservabilityConfig();
 
 builder.Services.AddSwaggerConfig();
@@ -49,6 +56,8 @@ app.UseSwaggerConfig();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseMiddleware<ObservabilityMiddleware>();
+
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 

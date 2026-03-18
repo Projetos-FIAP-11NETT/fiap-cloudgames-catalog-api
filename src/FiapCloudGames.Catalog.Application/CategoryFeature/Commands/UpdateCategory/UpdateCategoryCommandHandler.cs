@@ -1,4 +1,4 @@
-﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 using MediatR;
 
@@ -6,26 +6,22 @@ namespace FiapCloudGames.Catalog.Application.CategoryFeature.Commands.UpdateCate
 
 public class UpdateCategoryCommandHandler
     (
-        ICategoryRepository userRepository
+        ICategoryRepository categoryRepository
     )
     : IRequestHandler<UpdateCategoryCommand, bool>
 {
 
     public async Task<bool> Handle(UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
-        var existingCategory = await userRepository.GetByIdAsync(command.Id);
+        var existingCategory = await categoryRepository.GetByIdAsync(command.Id);
 
         if (existingCategory == null)
             throw new NotFoundException("Categoria não encontrada.");
 
-        existingCategory.GetType()
-            .GetProperty("Name")?
-            .SetValue(existingCategory, command.Name);
+        var updatedCategory = new Domain.Entities.Category(command.Id, command.Name);
 
-        userRepository.Update(existingCategory);
+        categoryRepository.Update(updatedCategory);
 
-        return await userRepository.SaveChangesAsync(cancellationToken);
+        return await categoryRepository.SaveChangesAsync(cancellationToken);
     }
-
-
 }

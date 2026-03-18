@@ -42,15 +42,24 @@ public class Order
             throw new DomainException("O valor total do pedido não pode ser negativo.");
     }
 
-    public void UpdateStatus(OrderStatus status)
+    public void Aprovar()
     {
         if (Status == OrderStatus.Rejeitado)
-            throw new DomainException("Não é possível alterar o status de um pedido cancelado");
-        if(Status == OrderStatus.Aprovado)
-            throw new DomainException("Não é possível alterar o status de um pedido já concluído");
-        
-        if(status == OrderStatus.Pendente)
-            PaidAt = DateTime.UtcNow;
-        Status = status;
+            throw new DomainException("Não é possível aprovar um pedido rejeitado.");
+        if (Status == OrderStatus.Aprovado)
+            throw new DomainException("O pedido já foi aprovado.");
+
+        Status = OrderStatus.Aprovado;
+        PaidAt = DateTime.UtcNow;
+    }
+
+    public void Rejeitar()
+    {
+        if (Status == OrderStatus.Rejeitado)
+            throw new DomainException("O pedido já foi rejeitado.");
+        if (Status == OrderStatus.Aprovado)
+            throw new DomainException("Não é possível rejeitar um pedido já aprovado.");
+
+        Status = OrderStatus.Rejeitado;
     }
 }

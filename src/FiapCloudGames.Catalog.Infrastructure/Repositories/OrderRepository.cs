@@ -12,6 +12,8 @@ public class OrderRepository(AppDbContext dataContext)
     public async Task<List<Order>> GetAllOrdersAsync()
     {
         return await dataContext.Orders
+            .AsNoTracking()
+            .Include(x=>x.Game)
             .ToListAsync();
     }
 

@@ -1,17 +1,30 @@
-﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Domain.Enums;
 using MediatR;
 
 namespace FiapCloudGames.Catalog.Application.OrderFeature.Commands.UpdateOrderStatus;
 
-public class UpdateOrderStatusCommandHandler (IOrderRepository orderRepository) : IRequestHandler<UpdateOrderStatusCommand, bool>
+public class UpdateOrderStatusCommandHandler(IOrderRepository orderRepository)
+    : IRequestHandler<UpdateOrderStatusCommand, bool>
 {
     public async Task<bool> Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
     {
         var order = await orderRepository.GetOrderByIdAsync(request.OrderId);
         if (order is null)
             return false;
-        
-        order.UpdateStatus(request.Status);
+
+        switch (request.Status)
+        {
+            case OrderStatus.Aprovado:
+                order.Aprovar();
+                break;
+            case OrderStatus.Rejeitado:
+                order.Rejeitar();
+                break;
+            default:
+                return false;
+        }
+
         orderRepository.Update(order);
         await orderRepository.SaveChangesAsync(cancellationToken);
         return true;

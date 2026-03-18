@@ -13,6 +13,7 @@ COPY ./src/FiapCloudGames.Catalog.Infrastructure/*.csproj ./FiapCloudGames.Catal
 COPY ./src/FiapCloudGames.Queue/*.csproj ./FiapCloudGames.Queue/
 COPY ./src/FiapCloudGames.Catalog.Tests/*.csproj ./FiapCloudGames.Catalog.Tests/
 COPY ./src/FiapCloudGames.Catalog.Observability/*.csproj ./FiapCloudGames.Catalog.Observability/
+COPY ./src/FiapCloudGames.Catalog.Shared/*.csproj ./FiapCloudGames.Catalog.Shared/
 
 
 RUN dotnet restore FiapCloudGames.Catalog.slnx
