@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="CategoryFeature\Queries\" />
-    <Folder Include="Handlers\" />
-    <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>
