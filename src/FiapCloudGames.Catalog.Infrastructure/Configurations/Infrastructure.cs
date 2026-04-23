@@ -1,6 +1,5 @@
-﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
-using FiapCloudGames.Catalog.Infrastructure.Data;
-using FiapCloudGames.Catalog.Infrastructure.Repositories;
+﻿using FiapCloudGames.Catalog.Infrastructure.Configurations.NoSql;
+using FiapCloudGames.Catalog.Infrastructure.Configurations.Relational;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,12 +10,8 @@ public static class Infrastructure
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-        
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IGameRepository, GameRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<ILibraryItemRepository, LibraryItemRepository>();
+        services.AddPostgres(configuration);
+        services.AddMongoDb(configuration);
 
         return services;
     }

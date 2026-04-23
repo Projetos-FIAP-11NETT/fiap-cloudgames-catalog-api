@@ -1,5 +1,5 @@
 using FiapCloudGames.Catalog.Application.DTOs;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
 using MediatR;
 
 namespace FiapCloudGames.Catalog.Application.OrderFeature.Queries.GetMyOrders;

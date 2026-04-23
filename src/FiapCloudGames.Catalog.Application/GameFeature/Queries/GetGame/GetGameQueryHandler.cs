@@ -1,6 +1,6 @@
 using FiapCloudGames.Catalog.Application.DTOs;
 using FiapCloudGames.Catalog.Application.GameFeature.Queries.GetGame;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
 using FiapCloudGames.Catalog.Domain.Entities;
 using MediatR;
 

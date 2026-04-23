@@ -1,5 +1,5 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Enums;
 using FiapCloudGames.Catalog.Domain.Exceptions;

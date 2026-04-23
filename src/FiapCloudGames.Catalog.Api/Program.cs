@@ -4,7 +4,7 @@ using FiapCloudGames.Catalog.Application.Behaviors;
 using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
 using FiapCloudGames.Catalog.Infrastructure.Configurations;
 using FiapCloudGames.Catalog.Infrastructure.Correlation;
-using FiapCloudGames.Catalog.Infrastructure.Data;
+using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
 using FiapCloudGames.Catalog.Observability.Configurations;
 using FiapCloudGames.Catalog.Observability.Middleware;
 using FiapCloudGames.Catalog.Shared.Abstractions;
