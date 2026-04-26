@@ -1,6 +1,7 @@
 ﻿using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Queue.Configurations.MassTransit;
 using FiapCloudGames.Queue.Configurations.Rabbitmq;
+using FiapCloudGames.Queue.Configurations.Sqs;
 using FiapCloudGames.Queue.Publishers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,9 @@ public static class QueueConfig
         services.AddScoped<IOrderPlacedPublisher, OrderPlacedPublisher>();
 
         services.RegisterRabbitmqStartup();
+        
+        services.Configure<SqsSettings>(configuration.GetSection(nameof(SqsSettings)));
+        services.RegisterSqsStartup();
 
         return services;
     }
