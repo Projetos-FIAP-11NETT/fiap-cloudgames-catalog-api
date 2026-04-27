@@ -15,8 +15,5 @@
       <ProjectReference Include="..\FiapCloudGames.Catalog.Application\FiapCloudGames.Catalog.Application.csproj" />
       <ProjectReference Include="..\FiapCloudGames.Catalog.Domain\FiapCloudGames.Catalog.Domain.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Consumers\" />
-    </ItemGroup>
 
 </Project>
