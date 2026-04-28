@@ -13,7 +13,8 @@ public static class MongoDbSerializerConfig
     {
         lock (_lock)
         {
-            if (_registered) return;
+            if (_registered)
+                return;
 
             BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
             BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));

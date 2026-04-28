@@ -18,8 +18,7 @@ public static class MongoDbConfig
         
         services.AddSingleton<MongoDbContext>();
         
-        services.AddScoped<IMongoGameRepository, MongoGameRepository>();
-        services.AddScoped<MongoLibraryItemRepository>();
+        services.AddScoped<ILibraryItemRepository, LibraryItemRepository>();
 
         return services;
     }

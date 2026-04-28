@@ -1,4 +1,3 @@
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 using MediatR;
@@ -6,8 +5,9 @@ using MediatR;
 namespace FiapCloudGames.Catalog.Application.LibraryItemFeature.Commands.CreateLibraryItem;
 
 public class CreateLibraryItemCommandHandler(
-    ILibraryItemRepository libraryItemRepository,
-    IGameRepository gameRepository
+    Domain.Contracts.Repositories.Relational.ILibraryItemRepository libraryItemRepository,
+    Domain.Contracts.Repositories.Relational.IGameRepository gameRepository,
+    Domain.Contracts.Repositories.NoSql.ILibraryItemRepository mongoLibraryItemRepository
 )
     : IRequestHandler<CreateLibraryItemCommand, bool>
 {
@@ -24,8 +24,11 @@ public class CreateLibraryItemCommandHandler(
         var libraryItem = new LibraryItem(command.UserId, game, command.OrderId);
 
         await libraryItemRepository.AddAsync(libraryItem);
-        await libraryItemRepository.SaveChangesAsync(cancellationToken);
+        var result = await libraryItemRepository.SaveChangesAsync(cancellationToken);
 
-        return true;
+        if (result)
+            await mongoLibraryItemRepository.InsertAsync(libraryItem, game.Title, game.Price);
+
+        return result;
     }
 }

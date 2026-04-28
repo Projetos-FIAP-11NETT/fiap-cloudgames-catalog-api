@@ -1,24 +1,30 @@
 using FiapCloudGames.Catalog.Application.DTOs;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.NoSql;
 using MediatR;
 
 namespace FiapCloudGames.Catalog.Application.LibraryItemFeature.Queries.GetLibraryItemsByUser;
 
-public class GetLibraryItemsByUserQueryHandler(ILibraryItemRepository libraryItemRepository)
+public class GetLibraryItemsByUserQueryHandler(
+        ILibraryItemRepository mongoLibraryItemRepository
+    )
     : IRequestHandler<GetLibraryItemsByUserQuery, IEnumerable<GetLibraryItemResponse>>
 {
-    public async Task<IEnumerable<GetLibraryItemResponse>> Handle(GetLibraryItemsByUserQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetLibraryItemResponse>> Handle(
+        GetLibraryItemsByUserQuery query,
+        CancellationToken cancellationToken)
     {
-        var items = await libraryItemRepository.GetByUserIdAsync(query.UserId);
+        var library = await mongoLibraryItemRepository.GetByUserIdAsync(query.UserId);
 
-        return items.Select(l => new GetLibraryItemResponse
+        if (library is null)
+            return [];
+
+        return library.Games.Select(g => new GetLibraryItemResponse
         {
-            Id = l.Id,
-            UserId = l.UserId,
-            GameId = l.GameId,
-            GameTitle = l.Game.Title,
-            OrderId = l.OrderId,
-            AddedAt = l.AddedAt
+            UserId = library.UserId,
+            GameId = g.GameId,
+            GameTitle = g.GameTitle,
+            OrderId = g.OrderId,
+            AddedAt = g.AddedAt
         });
     }
 }
