@@ -3,6 +3,7 @@ using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
 using FiapCloudGames.Catalog.Infrastructure.Repositories.Relational.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 
 namespace FiapCloudGames.Catalog.Infrastructure.Repositories.Relational;
 
@@ -22,21 +23,18 @@ public class GameRepository(AppDbContext dataContext) : Repository<Game>(dataCon
         return await dataContext.Games.AnyAsync(x => x.Id != excludeId && x.Title.ToLower() == normalizedTitle && x.Developer.ToLower() == normalizedDeveloper);
     }
 
-    public async Task<List<Game>> GetGame(Guid? id, string? title)
+    public async Task<List<Game>> GetGame(string filter)
     {
+        filter = $"%{filter}%";
+
         var query = dataContext.Games
+            .Where(x =>
+                EF.Functions.ILike(x.Id.ToString(), filter) ||
+                EF.Functions.ILike(x.Title, filter) ||
+                EF.Functions.ILike(x.Developer, filter)
+            )
             .Include(g => g.Categories)
             .AsQueryable();
-
-        if (id.HasValue)
-        {
-            query = query.Where(g => g.Id == id.Value);
-        }
-
-        if (!string.IsNullOrEmpty(title))
-        {
-            query = query.Where(g => g.Title == title);
-        }
 
         return await query.ToListAsync();
     }

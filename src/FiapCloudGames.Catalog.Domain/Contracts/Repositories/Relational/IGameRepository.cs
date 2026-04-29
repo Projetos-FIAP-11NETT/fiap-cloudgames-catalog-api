@@ -7,5 +7,5 @@ public interface IGameRepository : IRepository<Game>
 {
     Task<bool> GameAlreadyExistsByTitle(string name, string developer);
     Task<bool> GameAlreadyExistsByTitle(string name, string developer, Guid excludeId);
-    Task<List<Game>> GetGame(Guid? id, string? title);
+    Task<List<Game>> GetGame(string filter);
 }

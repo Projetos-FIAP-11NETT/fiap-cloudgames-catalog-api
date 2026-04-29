@@ -1,7 +1,6 @@
 using FiapCloudGames.Catalog.Api.Configurations;
 using FiapCloudGames.Catalog.Api.Middlewares;
-using FiapCloudGames.Catalog.Application.Behaviors;
-using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
+using FiapCloudGames.Catalog.Application.Configurations;
 using FiapCloudGames.Catalog.Infrastructure.Configurations;
 using FiapCloudGames.Catalog.Infrastructure.Correlation;
 using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
@@ -9,7 +8,6 @@ using FiapCloudGames.Catalog.Observability.Configurations;
 using FiapCloudGames.Catalog.Observability.Middleware;
 using FiapCloudGames.Catalog.Shared.Abstractions;
 using FiapCloudGames.Queue.Configurations;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,11 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddMediatR(cfg => 
-{
-    cfg.RegisterServicesFromAssembly(typeof(CreateCategoryCommand).Assembly);
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-});
+builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 
