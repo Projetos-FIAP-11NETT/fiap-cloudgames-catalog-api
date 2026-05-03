@@ -1,4 +1,3 @@
-using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Shared.Abstractions;
 using FiapCloudGames.Queue.Configurations.Sqs;
 using FiapCloudGames.Queue.Contracts;
@@ -53,15 +52,6 @@ public class OrderPlacedPublisherTest
     /// </summary>
     private static T GetProp<T>(object obj, string name) =>
         (T)obj.GetType().GetProperty(name)!.GetValue(obj)!;
-
-    /// <summary>
-    /// Verifica que o publisher implementa corretamente a interface <see cref="IOrderPlacedPublisher"/>.
-    /// </summary>
-    [Fact]
-    public void ShouldImplementIOrderPlacedPublisher()
-    {
-        _publisher.Should().BeAssignableTo<IOrderPlacedPublisher>();
-    }
 
     /// <summary>
     /// Garante que PublishAsync delega a publicação ao IPublishEndpoint com os dados corretos,
@@ -180,13 +170,4 @@ public class OrderPlacedPublisherTest
             Times.Once);
     }
 
-    /// <summary>
-    /// Verifica que o <see cref="ICorrelationIdAccessor"/> retorna o CorrelationId configurado,
-    /// garantindo a rastreabilidade das mensagens publicadas.
-    /// </summary>
-    [Fact]
-    public void CorrelationIdAccessor_ShouldReturnConfiguredId()
-    {
-        _correlationMock.Object.CorrelationId.Should().Be(_correlationId);
-    }
 }

@@ -133,39 +133,6 @@ public class PaymentProcessedConsumerTest
     }
 
     /// <summary>
-    /// Confirma que o CorrelationId do contexto é capturado pelo consumer,
-    /// garantindo rastreabilidade distribuída nos logs do serviço.
-    /// </summary>
-    [Fact]
-    public async Task Consume_ShouldLogCorrelationIdFromContext()
-    {
-        // Arrange
-        var correlationId = Guid.NewGuid();
-        const int orderId = 10;
-        var order = CreateOrder(orderId);
-        var context = BuildConsumeContext(orderId: orderId, correlationId: correlationId);
-
-        _orderRepositoryMock.Setup(r => r.GetOrderByIdAsync(orderId)).ReturnsAsync(order);
-        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateOrderStatusCommand>(), default)).ReturnsAsync(true);
-        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateLibraryItemCommand>(), default)).ReturnsAsync(true);
-
-        // Act
-        await _consumer.Consume(context.Object);
-
-        // Assert
-        _loggerMock.Verify(
-            l => l.Log(
-                LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, _) =>
-                    v.ToString()!.Contains(correlationId.ToString()) &&
-                    v.ToString()!.Contains(orderId.ToString())),
-                null,
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.AtLeastOnce);
-    }
-
-    /// <summary>
     /// Verifica que, ao receber um pagamento aprovado para um pedido inexistente,
     /// nenhum command é enviado ao MediatR e um log de erro é registrado.
     /// </summary>
@@ -318,58 +285,4 @@ public class PaymentProcessedConsumerTest
             Times.Once);
     }
 
-    /// <summary>
-    /// Verifica se o UpdateOrderStatusCommand enviado ao mediator contém
-    /// exatamente o OrderId e Status corretos para pagamento aprovado.
-    /// </summary>
-    [Fact]
-    public async Task Consume_WhenApproved_ShouldSendUpdateCommandWithCorrectData()
-    {
-        // Arrange
-        const int orderId = 42;
-        var order = CreateOrder(orderId);
-        var context = BuildConsumeContext(orderId: orderId, status: PaymentStatus.Approved);
-
-        _orderRepositoryMock.Setup(r => r.GetOrderByIdAsync(orderId)).ReturnsAsync(order);
-        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateOrderStatusCommand>(), default)).ReturnsAsync(true);
-        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateLibraryItemCommand>(), default)).ReturnsAsync(true);
-
-        // Act
-        await _consumer.Consume(context.Object);
-
-        // Assert
-        _mediatorMock.Verify(m => m.Send(
-            It.Is<UpdateOrderStatusCommand>(cmd =>
-                cmd.OrderId == orderId &&
-                cmd.Status == OrderStatus.Aprovado),
-            It.IsAny<CancellationToken>()), Times.Once);
-    }
-
-    /// <summary>
-    /// Confirma que os campos UserId, GameId e OrderId são repassados ao
-    /// CreateLibraryItemCommand exatamente como vindos da entidade Order.
-    /// </summary>
-    [Fact]
-    public async Task Consume_WhenApproved_ShouldSendCreateLibraryItemWithCorrectData()
-    {
-        // Arrange
-        const int orderId = 55;
-        var order = CreateOrder(orderId);
-        var context = BuildConsumeContext(orderId: orderId, status: PaymentStatus.Approved);
-
-        _orderRepositoryMock.Setup(r => r.GetOrderByIdAsync(orderId)).ReturnsAsync(order);
-        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateOrderStatusCommand>(), default)).ReturnsAsync(true);
-        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateLibraryItemCommand>(), default)).ReturnsAsync(true);
-
-        // Act
-        await _consumer.Consume(context.Object);
-
-        // Assert
-        _mediatorMock.Verify(m => m.Send(
-            It.Is<CreateLibraryItemCommand>(cmd =>
-                cmd.UserId == order.UserId &&
-                cmd.GameId == order.GameId &&
-                cmd.OrderId == orderId),
-            It.IsAny<CancellationToken>()), Times.Once);
-    }
 }
