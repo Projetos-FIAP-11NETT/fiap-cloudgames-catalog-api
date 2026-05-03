@@ -1,11 +1,11 @@
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.NoSql;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.ReadModels;
-using FiapCloudGames.Catalog.Infrastructure.Data.NoSql.Mongodb;
-using FiapCloudGames.Catalog.Infrastructure.Data.NoSql.Mongodb.Documents;
+using FiapCloudGames.Catalog.Infrastructure.Data.Mongodb;
+using FiapCloudGames.Catalog.Infrastructure.Data.Mongodb.Documents;
 using MongoDB.Driver;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Repositories.NoSql.MongoDb;
+namespace FiapCloudGames.Catalog.Infrastructure.Repositories.MongoDb;
 
 public class LibraryItemRepository(MongoDbContext context) : ILibraryItemRepository
 {

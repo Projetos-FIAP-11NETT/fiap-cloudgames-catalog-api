@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Data.NoSql.Mongodb.Documents;
+namespace FiapCloudGames.Catalog.Infrastructure.Data.Mongodb.Documents;
 
 public class GameDocument
 {

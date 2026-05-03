@@ -3,7 +3,6 @@ using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
 using FiapCloudGames.Catalog.Infrastructure.Repositories.Relational.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
 
 namespace FiapCloudGames.Catalog.Infrastructure.Repositories.Relational;
 
@@ -25,13 +24,13 @@ public class GameRepository(AppDbContext dataContext) : Repository<Game>(dataCon
 
     public async Task<List<Game>> GetGame(string filter)
     {
-        filter = $"%{filter}%";
+        var pattern = $"%{filter}%";
 
         var query = dataContext.Games
             .Where(x =>
-                EF.Functions.ILike(x.Id.ToString(), filter) ||
-                EF.Functions.ILike(x.Title, filter) ||
-                EF.Functions.ILike(x.Developer, filter)
+                EF.Functions.ILike(x.Id.ToString(), pattern) ||
+                EF.Functions.ILike(x.Title, pattern) ||
+                EF.Functions.ILike(x.Developer, pattern)
             )
             .Include(g => g.Categories)
             .AsQueryable();

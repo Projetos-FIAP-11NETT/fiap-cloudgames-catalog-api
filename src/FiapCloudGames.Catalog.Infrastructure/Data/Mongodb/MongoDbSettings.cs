@@ -1,4 +1,4 @@
-namespace FiapCloudGames.Catalog.Infrastructure.Data.NoSql.Mongodb;
+namespace FiapCloudGames.Catalog.Infrastructure.Data.Mongodb;
 
 public class MongoDbSettings
 {

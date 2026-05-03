@@ -1,7 +1,7 @@
 using FiapCloudGames.Catalog.Application.DTOs;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
 using MediatR;
-using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
 namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Queries.GetGame;
@@ -9,7 +9,7 @@ namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Queries.GetGam
 public class GetGameQueryHandler
     (
         IGameRepository gameRepository,
-        IDistributedCache cache
+        IRedisRepository redisRepository
     )
     : IRequestHandler<GetGameQuery, IEnumerable<GetGameResponse>>
 {
@@ -17,45 +17,31 @@ public class GetGameQueryHandler
 
     public async Task<IEnumerable<GetGameResponse>> Handle(GetGameQuery query, CancellationToken cancellationToken)
     {
+        var cacheKey = "games:all";        
+        if (!string.IsNullOrWhiteSpace(query.Filter))
+            cacheKey = $"games:{query.Filter.ToLower()}";
+
+
+
+        var cached = await redisRepository.GetAsync(cacheKey, cancellationToken);
+        if (cached is not null)
+            return JsonSerializer.Deserialize<IEnumerable<GetGameResponse>>(cached)!;
 
         var games = await gameRepository.GetGame(query.Filter);
 
-        return games.Select(x => new GetGameResponse
+        var result = games.Select(x => new GetGameResponse
         {
             Title = x.Title,
-            Categories = x.Categories.Select(x => x.Id).ToList(),
+            Categories = [.. x.Categories.Select(x => x.Id)],
             Price = x.Price,
             Id = x.Id,
             Description = x.Description,
             Developer = x.Developer,
             ReleaseDate = x.ReleaseDate
-        });
+        }).ToList();
 
-        //var cacheKey = $"games:{query.Id}:{query.Title.ToUpper()}";
+        await redisRepository.SetAsync(cacheKey, JsonSerializer.Serialize(result), CacheDuration, cancellationToken);
 
-        //var cached = await cache.GetStringAsync(cacheKey, cancellationToken);
-        //if (cached is not null)
-        //    return JsonSerializer.Deserialize<IEnumerable<GetGameResponse>>(cached)!;
-
-        //var games = await gameRepository.GetGame(query.Id, query.Title);
-
-        //var result = games.Select(x => new GetGameResponse
-        //{
-        //    Title = x.Title,
-        //    Categories = [.. x.Categories.Select(x => x.Id)],
-        //    Price = x.Price,
-        //    Id = x.Id,
-        //    Description = x.Description,
-        //    Developer = x.Developer,
-        //    ReleaseDate = x.ReleaseDate
-        //}).ToList();
-
-        //await cache.SetStringAsync(
-        //    cacheKey,
-        //    JsonSerializer.Serialize(result),
-        //    new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = CacheDuration },
-        //    cancellationToken);
-
-        //return result;
+        return result;
     }
 }

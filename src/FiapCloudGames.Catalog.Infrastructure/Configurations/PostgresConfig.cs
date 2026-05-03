@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Configurations.Relational;
+namespace FiapCloudGames.Catalog.Infrastructure.Configurations;
 
 public static class PostgresConfig
 {

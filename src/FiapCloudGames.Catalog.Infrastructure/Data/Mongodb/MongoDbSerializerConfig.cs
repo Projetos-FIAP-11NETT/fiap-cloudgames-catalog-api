@@ -2,7 +2,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Data.NoSql.Mongodb;
+namespace FiapCloudGames.Catalog.Infrastructure.Data.Mongodb;
 
 public static class MongoDbSerializerConfig
 {

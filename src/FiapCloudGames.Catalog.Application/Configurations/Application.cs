@@ -5,10 +5,9 @@ namespace FiapCloudGames.Catalog.Application.Configurations;
 
 public static class Application
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR();
-        services.AddRedis(configuration);
 
         return services;
     }

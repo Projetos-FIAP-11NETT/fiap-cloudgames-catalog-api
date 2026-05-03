@@ -1,7 +1,7 @@
 ﻿using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.ReadModels;
 
-namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories.NoSql;
+namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 
 public interface ILibraryItemRepository
 {

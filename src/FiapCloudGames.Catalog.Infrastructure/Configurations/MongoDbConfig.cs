@@ -1,10 +1,10 @@
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.NoSql;
-using FiapCloudGames.Catalog.Infrastructure.Data.NoSql.Mongodb;
-using FiapCloudGames.Catalog.Infrastructure.Repositories.NoSql.MongoDb;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
+using FiapCloudGames.Catalog.Infrastructure.Data.Mongodb;
+using FiapCloudGames.Catalog.Infrastructure.Repositories.MongoDb;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Configurations.NoSql;
+namespace FiapCloudGames.Catalog.Infrastructure.Configurations;
 
 public static class MongoDbConfig
 {

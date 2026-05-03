@@ -1,5 +1,5 @@
 using FiapCloudGames.Catalog.Application.DTOs;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.NoSql;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using MediatR;
 
 namespace FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Queries.GetLibraryItemsByUser;

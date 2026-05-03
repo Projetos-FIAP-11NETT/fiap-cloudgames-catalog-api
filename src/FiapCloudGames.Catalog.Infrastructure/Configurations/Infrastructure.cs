@@ -1,7 +1,4 @@
-﻿using FiapCloudGames.Catalog.Infrastructure.Configurations.NoSql;
-using FiapCloudGames.Catalog.Infrastructure.Configurations.Relational;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FiapCloudGames.Catalog.Infrastructure.Configurations;
@@ -12,7 +9,8 @@ public static class Infrastructure
     {
         services.AddPostgres(configuration);
         services.AddMongoDb(configuration);
+        services.AddRedis(configuration);
 
         return services;
     }
-}   
+}
