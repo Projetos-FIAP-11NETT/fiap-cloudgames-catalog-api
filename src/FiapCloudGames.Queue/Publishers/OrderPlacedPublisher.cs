@@ -15,7 +15,7 @@ public class OrderPlacedPublisher(ISqsPublish bus, ILogger<OrderPlacedPublisher>
         CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            "Publishing IOrderPlaced to RabbitMQ: OrderId={OrderId}, User={UserId}, Game={GameId}",
+            "[catalog-service] Publishing IOrderPlaced to SQS: OrderId={OrderId}, User={UserId}, Game={GameId}",
             orderId, userId, gameId);
 
         return _publishEndpoint.Publish<IOrderPlaced>(new
