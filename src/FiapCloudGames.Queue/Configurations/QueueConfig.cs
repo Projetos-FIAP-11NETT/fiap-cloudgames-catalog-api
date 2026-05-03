@@ -12,13 +12,11 @@ public static class QueueConfig
 {
     public static IServiceCollection AddQueueConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        // services.Configure<RabbitmqSettings>(configuration.GetSection(nameof(RabbitmqSettings)));
         services.Configure<MassTransitSettings>(configuration.GetSection(nameof(MassTransitSettings)));
         services.Configure<SqsSettings>(configuration.GetSection(nameof(SqsSettings)));
 
         services.AddScoped<IOrderPlacedPublisher, OrderPlacedPublisher>();
-
-        // services.RegisterRabbitmqStartup();
+        
         services.RegisterSqsStartup();
 
         return services;
