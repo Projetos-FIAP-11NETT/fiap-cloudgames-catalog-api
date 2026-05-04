@@ -1,13 +1,13 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Shared.Abstractions;
-using FiapCloudGames.Queue.Configurations.Sqs;
+using FiapCloudGames.Queue.Configurations.Rabbitmq;
 using FiapCloudGames.Queue.Contracts;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace FiapCloudGames.Queue.Publishers;
 
-public class OrderPlacedPublisher(ISqsPublish bus, ILogger<OrderPlacedPublisher> logger, ICorrelationIdAccessor correlation) : IOrderPlacedPublisher
+public class OrderPlacedPublisher(IRabbitmqPublish bus, ILogger<OrderPlacedPublisher> logger, ICorrelationIdAccessor correlation) : IOrderPlacedPublisher
 {
     private readonly IPublishEndpoint _publishEndpoint = bus;
 
@@ -15,7 +15,7 @@ public class OrderPlacedPublisher(ISqsPublish bus, ILogger<OrderPlacedPublisher>
         CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            "[catalog-service] Publishing IOrderPlaced to SQS: OrderId={OrderId}, User={UserId}, Game={GameId}",
+            "Publishing IOrderPlaced to RabbitMQ: OrderId={OrderId}, User={UserId}, Game={GameId}",
             orderId, userId, gameId);
 
         return _publishEndpoint.Publish<IOrderPlaced>(new
