@@ -39,7 +39,7 @@ public class OrderTest
         Assert.Equal(game.Price, order.TotalAmount);
         Assert.Equal(OrderStatus.Pendente, order.Status);
         Assert.Null(order.PaidAt);
-        //Assert.NotEqual(0, order.Id);
+        Assert.NotEqual(0, order.Id);
     }
 
     #endregion
