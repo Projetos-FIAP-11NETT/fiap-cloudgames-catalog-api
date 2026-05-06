@@ -1,7 +1,7 @@
-﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational.Generic;
+﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres.Generic;
 using FiapCloudGames.Catalog.Domain.Entities;
 
-namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
+namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 
 public interface ICategoryRepository : IRepository<Category> { 
     Task<bool> AnyCategoryByNameAsync(string name);

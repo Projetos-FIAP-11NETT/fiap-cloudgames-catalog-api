@@ -1,5 +1,5 @@
 ﻿using FiapCloudGames.Catalog.Application.DTOs;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using MediatR;
 

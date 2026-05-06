@@ -1,4 +1,4 @@
-﻿namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational.Generic;
+﻿namespace FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres.Generic;
 
 public interface IRepository<T> where T : class
 {

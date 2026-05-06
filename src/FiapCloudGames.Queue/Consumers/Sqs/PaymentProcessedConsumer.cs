@@ -1,4 +1,4 @@
-﻿using FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Commands.CreateLibraryItem;
+using FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Commands.CreateLibraryItem;
 using FiapCloudGames.Catalog.Application.Features.OrderFeature.Commands.UpdateOrderStatus;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Enums;
@@ -7,7 +7,7 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace FiapCloudGames.Queue.Consumers.Rabbitmq;
+namespace FiapCloudGames.Queue.Consumers.Sqs;
 
 public class PaymentProcessedConsumer(ILogger<PaymentProcessedConsumer> logger, IMediator mediator, IOrderRepository orderRepository) : IConsumer<IPaymentProcessed>
 {
@@ -27,7 +27,7 @@ public class PaymentProcessedConsumer(ILogger<PaymentProcessedConsumer> logger, 
         }
         catch (Exception ex)
         {
-            logger.LogError("[catalog-service] CorrelationId {correlationId} - PaymentProcessedConsumer - Error processing OrderId {orderId}", 
+            logger.LogError("[catalog-service] CorrelationId {correlationId} - PaymentProcessedConsumer - Error processing OrderId {orderId}",
                 correlationId ,context.Message.OrderId);
         }
     }
@@ -44,14 +44,14 @@ public class PaymentProcessedConsumer(ILogger<PaymentProcessedConsumer> logger, 
             return;
         }
         var updateOrderCommand = new UpdateOrderStatusCommand(order.Id, OrderStatus.Aprovado);
-        
+
         if (await mediator.Send(updateOrderCommand))
         {
             var addGameCommand = new CreateLibraryItemCommand(order.UserId, order.GameId, order.Id);
             await mediator.Send(addGameCommand);
         }
         else
-            logger.LogError("[catalog-service] CorrelationId {correlationId} - PaymentProcessedConsumer - Order {orderId} - failed to update status.", 
+            logger.LogError("[catalog-service] CorrelationId {correlationId} - PaymentProcessedConsumer - Order {orderId} - failed to update status.",
                 correlationId, message.OrderId);
     }
     private async Task ProcessRejectedPayment(IPaymentProcessed message)

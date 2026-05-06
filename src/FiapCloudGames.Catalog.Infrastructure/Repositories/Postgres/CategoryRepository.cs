@@ -1,4 +1,4 @@
-﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
+﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
 using FiapCloudGames.Catalog.Infrastructure.Repositories.Relational.Generic;

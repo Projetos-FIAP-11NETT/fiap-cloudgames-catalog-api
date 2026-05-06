@@ -1,6 +1,6 @@
 using FiapCloudGames.Catalog.Application.DTOs;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Relational;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 

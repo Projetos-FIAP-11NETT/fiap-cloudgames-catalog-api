@@ -1,4 +1,4 @@
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 using MediatR;
@@ -6,9 +6,9 @@ using MediatR;
 namespace FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Commands.CreateLibraryItem;
 
 public class CreateLibraryItemCommandHandler(
-    Domain.Contracts.Repositories.Relational.ILibraryItemRepository libraryItemRepository,
-    Domain.Contracts.Repositories.Relational.IGameRepository gameRepository,
-    ILibraryItemRepository mongoLibraryItemRepository
+    Domain.Contracts.Repositories.Postgres.ILibraryItemRepository libraryItemRepository,
+    IGameRepository gameRepository,
+    Domain.Contracts.Repositories.MongoDb.ILibraryItemRepository mongoLibraryItemRepository
 )
     : IRequestHandler<CreateLibraryItemCommand, bool>
 {
