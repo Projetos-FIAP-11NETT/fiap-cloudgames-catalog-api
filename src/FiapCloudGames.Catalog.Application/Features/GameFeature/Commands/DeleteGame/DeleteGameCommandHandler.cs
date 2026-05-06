@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 using MediatR;
 
@@ -6,21 +7,24 @@ namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.Delet
 
 public class DeleteGameCommandHandler
     (
-        IGameRepository gameRepository
+        IGameRepository gameRepository,
+        IRedisRepository redisRepository
     )
     : IRequestHandler<DeleteGameCommand, bool>
 {
-
     public async Task<bool> Handle(DeleteGameCommand command, CancellationToken cancellationToken)
     {
-        var existingGame = await gameRepository.GetByIdAsync(command.Id);
-
-        if (existingGame == null)
-            throw new NotFoundException("Jogo não encontrado.");
+        var existingGame = 
+            await gameRepository.GetByIdAsync(command.Id)
+                ?? throw new NotFoundException("Jogo não encontrado.");
 
         gameRepository.Remove(existingGame);
 
-        return await gameRepository.SaveChangesAsync(cancellationToken);
-    }
+        var result = await gameRepository.SaveChangesAsync(cancellationToken);
 
+        if (result)
+            await redisRepository.RemoveKeysThatContainGameAsync(existingGame.Id, cancellationToken);
+
+        return result;
+    }
 }

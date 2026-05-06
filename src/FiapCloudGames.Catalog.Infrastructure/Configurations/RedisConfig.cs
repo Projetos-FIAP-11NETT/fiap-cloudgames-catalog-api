@@ -2,6 +2,7 @@ using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Infrastructure.Repositories.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace FiapCloudGames.Catalog.Infrastructure.Configurations;
 
@@ -15,6 +16,9 @@ public static class RedisConfig
         {
             options.Configuration = connectionString;
         });
+
+        services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect(connectionString!));
 
         services.AddSingleton<IRedisRepository, RedisRepository>();
 
