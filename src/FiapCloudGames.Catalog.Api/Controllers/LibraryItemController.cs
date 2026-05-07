@@ -1,8 +1,8 @@
-using System.Security.Claims;
-using FiapCloudGames.Catalog.Application.LibraryItemFeature.Queries.GetLibraryItemsByUser;
+using FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Queries.GetLibraryItemsByUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FiapCloudGames.Catalog.Api.Controllers;
 

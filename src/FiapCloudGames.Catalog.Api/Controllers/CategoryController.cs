@@ -1,7 +1,7 @@
-﻿using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.CreateCategory;
-using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.DeleteCategory;
-using FiapCloudGames.Catalog.Application.CategoryFeature.Commands.UpdateCategory;
-using FiapCloudGames.Catalog.Application.CategoryFeature.Queries.GetCategory;
+﻿using FiapCloudGames.Catalog.Application.Features.CategoryFeature.Commands.CreateCategory;
+using FiapCloudGames.Catalog.Application.Features.CategoryFeature.Commands.DeleteCategory;
+using FiapCloudGames.Catalog.Application.Features.CategoryFeature.Commands.UpdateCategory;
+using FiapCloudGames.Catalog.Application.Features.CategoryFeature.Queries.GetCategory;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

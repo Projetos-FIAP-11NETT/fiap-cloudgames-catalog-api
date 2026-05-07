@@ -1,6 +1,6 @@
-using FiapCloudGames.Catalog.Application.LibraryItemFeature.Commands.CreateLibraryItem;
-using FiapCloudGames.Catalog.Application.OrderFeature.Commands.UpdateOrderStatus;
-using FiapCloudGames.Catalog.Domain.Contracts.Repositories;
+using FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Commands.CreateLibraryItem;
+using FiapCloudGames.Catalog.Application.Features.OrderFeature.Commands.UpdateOrderStatus;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Enums;
 using FiapCloudGames.Queue.Consumers.Sqs;
