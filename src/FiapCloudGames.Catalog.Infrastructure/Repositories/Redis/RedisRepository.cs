@@ -14,6 +14,7 @@ public class RedisRepository
     : IRedisRepository
 {
     private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(5);
+    private static readonly TimeSpan IndexDuration = CacheDuration.Add(TimeSpan.FromMinutes(1));
 
     public async Task RemoveKeysThatContainGameAsync(Guid gameId, CancellationToken cancellationToken = default)
     {
@@ -66,6 +67,10 @@ public class RedisRepository
         // Para cada jogo no resultado, registra que a key pertence a ele
         var indexTasks = result.Select(g =>
             batch.SetAddAsync($"games:index:{g.Id}", key)).ToList();
+
+        // Renova o TTL do índice a cada acesso, garantindo que expire após o cache
+        var expireTasks = result.Select(g =>
+            batch.KeyExpireAsync($"games:index:{g.Id}", IndexDuration)).ToList();
 
         batch.Execute();
 
