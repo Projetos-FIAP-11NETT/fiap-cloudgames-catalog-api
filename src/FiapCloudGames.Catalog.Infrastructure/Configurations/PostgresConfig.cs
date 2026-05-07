@@ -1,6 +1,6 @@
 ﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
-using FiapCloudGames.Catalog.Infrastructure.Repositories.Relational;
+using FiapCloudGames.Catalog.Infrastructure.Repositories.Postgres;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

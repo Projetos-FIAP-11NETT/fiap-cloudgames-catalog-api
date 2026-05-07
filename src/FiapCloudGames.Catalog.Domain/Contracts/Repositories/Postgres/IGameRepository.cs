@@ -8,4 +8,5 @@ public interface IGameRepository : IRepository<Game>
     Task<bool> GameAlreadyExistsByTitle(string name, string developer);
     Task<bool> GameAlreadyExistsByTitle(string name, string developer, Guid excludeId);
     Task<List<Game>> GetGame(string filter);
+    Task<Game?> GetByIdWithCategoriesAsync(Guid id);
 }

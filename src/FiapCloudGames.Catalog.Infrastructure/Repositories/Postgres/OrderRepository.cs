@@ -1,10 +1,10 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Infrastructure.Data.Relational;
-using FiapCloudGames.Catalog.Infrastructure.Repositories.Relational.Generic;
+using FiapCloudGames.Catalog.Infrastructure.Repositories.Postgres.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace FiapCloudGames.Catalog.Infrastructure.Repositories.Relational;
+namespace FiapCloudGames.Catalog.Infrastructure.Repositories.Postgres;
 
 public class OrderRepository(AppDbContext dataContext)
     : Repository<Order>(dataContext), IOrderRepository

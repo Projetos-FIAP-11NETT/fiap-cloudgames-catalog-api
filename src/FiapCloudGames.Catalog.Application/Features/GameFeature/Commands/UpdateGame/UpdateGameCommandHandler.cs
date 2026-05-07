@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 using MediatR;
 
@@ -7,14 +8,14 @@ namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.Updat
 public class UpdateGameCommandHandler
     (
         IGameRepository gameRepository,
-        ICategoryRepository categoryRepository
+        ICategoryRepository categoryRepository,
+        IRedisRepository redisRepository
     )
     : IRequestHandler<UpdateGameCommand, bool>
 {
-
     public async Task<bool> Handle(UpdateGameCommand command, CancellationToken cancellationToken)
     {
-        var existingGame = await gameRepository.GetByIdAsync(command.Id);
+        var existingGame = await gameRepository.GetByIdWithCategoriesAsync(command.Id);
 
         if (existingGame == null)
             throw new BusinessException("Jogo não encontrado.");
@@ -27,30 +28,21 @@ public class UpdateGameCommandHandler
         if (!categories.Any())
             throw new BusinessException("É obrigatório definir pelo menos uma categoria para o jogo.");
 
-        existingGame.GetType()
-            .GetProperty("Title")?
-            .SetValue(existingGame, command.Title);
-
-        existingGame.GetType()
-            .GetProperty("Description")?
-            .SetValue(existingGame, command.Description);
-
-        existingGame.GetType()
-            .GetProperty("ReleaseDate")?
-            .SetValue(existingGame, command.ReleaseDate);
-
-        existingGame.GetType()
-            .GetProperty("Developer")?
-            .SetValue(existingGame, command.Developer);
-
-        existingGame.GetType()
-            .GetProperty("Price")?
-            .SetValue(existingGame, command.Price);
+        existingGame.Update(
+            command.Title,
+            command.Description,
+            command.ReleaseDate,
+            command.Developer,
+            command.Price,
+            categories);
 
         gameRepository.Update(existingGame);
 
-        return await gameRepository.SaveChangesAsync(cancellationToken);
+        var result = await gameRepository.SaveChangesAsync(cancellationToken);
+
+        if (result)
+            await redisRepository.RemoveKeysThatContainGameAsync(existingGame.Id, cancellationToken);
+
+        return result;
     }
-
-
 }
