@@ -47,7 +47,7 @@ public class PaymentProcessedConsumer(ILogger<PaymentProcessedConsumer> logger, 
 
         if (await mediator.Send(updateOrderCommand))
         {
-            var addGameCommand = new CreateLibraryItemCommand(order.UserId, order.GameId, order.Id);
+            var addGameCommand = new CreateLibraryItemCommand(order.UserId, order.GameId, order.Id, message.Email);
             await mediator.Send(addGameCommand);
         }
         else

@@ -6,4 +6,5 @@ public class SqsSettings
     public string AccessKey { get; set; } = "test";
     public string SecretKey { get; set; } = "test";
     public string ServiceUrl { get; set; } = string.Empty;
+    public string EmailQueueUrl { get; set; } = string.Empty;
 }

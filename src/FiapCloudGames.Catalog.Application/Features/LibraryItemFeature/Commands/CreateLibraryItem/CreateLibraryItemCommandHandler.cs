@@ -1,3 +1,4 @@
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
@@ -6,9 +7,10 @@ using MediatR;
 namespace FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Commands.CreateLibraryItem;
 
 public class CreateLibraryItemCommandHandler(
-    Domain.Contracts.Repositories.Postgres.ILibraryItemRepository libraryItemRepository,
+    ILibraryItemRepository libraryItemRepository,
     IGameRepository gameRepository,
-    Domain.Contracts.Repositories.MongoDb.ILibraryItemRepository mongoLibraryItemRepository
+    Domain.Contracts.Repositories.MongoDb.ILibraryItemRepository mongoLibraryItemRepository,
+    IEmailNotificationPublisher emailNotificationPublisher
 )
     : IRequestHandler<CreateLibraryItemCommand, bool>
 {
@@ -28,7 +30,15 @@ public class CreateLibraryItemCommandHandler(
         var result = await libraryItemRepository.SaveChangesAsync(cancellationToken);
 
         if (result)
+        {
             await mongoLibraryItemRepository.InsertAsync(libraryItem, game.Title, game.Price);
+
+            await emailNotificationPublisher.PublishAsync(
+                to: command.Email,
+                subject: "Novo item adicionado à sua biblioteca",
+                body: $"Jogo {game.Title} adicionado à sua biblioteca.",
+                cancellationToken: cancellationToken);
+        }
 
         return result;
     }

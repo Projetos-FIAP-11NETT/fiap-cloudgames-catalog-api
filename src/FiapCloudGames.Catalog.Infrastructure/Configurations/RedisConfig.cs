@@ -20,7 +20,7 @@ public static class RedisConfig
         services.AddSingleton<IConnectionMultiplexer>(
             ConnectionMultiplexer.Connect(connectionString!));
 
-        services.AddSingleton<IRedisRepository, RedisRepository>();
+        services.AddScoped<IRedisRepository, RedisRepository>();
 
         return services;
     }

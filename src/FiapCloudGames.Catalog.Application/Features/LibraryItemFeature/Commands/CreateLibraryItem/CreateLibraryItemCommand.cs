@@ -4,6 +4,6 @@ namespace FiapCloudGames.Catalog.Application.Features.LibraryItemFeature.Command
 
 public sealed record class CreateLibraryItemCommand
 (
-    Guid UserId, Guid GameId, int? OrderId = null
+    Guid UserId, Guid GameId, int OrderId, string Email
 )
     : IRequest<bool>;
