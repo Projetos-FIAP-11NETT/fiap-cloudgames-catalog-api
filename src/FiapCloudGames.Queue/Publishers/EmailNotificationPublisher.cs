@@ -1,6 +1,7 @@
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Shared.Abstractions;
 using FiapCloudGames.Queue.Configurations.Sqs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,9 +10,12 @@ using System.Text.Json;
 namespace FiapCloudGames.Queue.Publishers;
 
 public class EmailNotificationPublisher(
-    IAmazonSQS sqsClient,
-    IOptions<SqsSettings> sqsSettings,
-    ILogger<EmailNotificationPublisher> logger) : IEmailNotificationPublisher
+        IAmazonSQS sqsClient,
+        IOptions<SqsSettings> sqsSettings,
+        ILogger<EmailNotificationPublisher> logger,
+        ICorrelationIdAccessor correlation
+    )
+    : IEmailNotificationPublisher
 {
     public async Task PublishAsync(string to, string subject, string body, CancellationToken cancellationToken = default)
     {
@@ -23,13 +27,15 @@ public class EmailNotificationPublisher(
         {
             To = to,
             Subject = subject,
-            Body = body
+            Body = body,
+            CorrelationId = correlation.CorrelationId.ToString()
         });
 
         await sqsClient.SendMessageAsync(new SendMessageRequest
         {
             QueueUrl = sqsSettings.Value.EmailQueueUrl,
             MessageBody = messageBody
-        }, cancellationToken);
+        },
+        cancellationToken);
     }
 }
