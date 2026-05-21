@@ -26,8 +26,4 @@
     <ProjectReference Include="..\FiapCloudGames.Queue\FiapCloudGames.Queue.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Unit\" />
-  </ItemGroup>
-
 </Project>
