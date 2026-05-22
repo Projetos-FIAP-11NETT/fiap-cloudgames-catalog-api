@@ -38,6 +38,10 @@ public class OrderController
     public async Task<IActionResult> CreateAsync([FromBody] CreateOrderRequest request)
     {
         var userIdString = User.FindFirstValue("system_user_id");
+
+        if (string.IsNullOrWhiteSpace(userIdString))
+            return BadRequest("User ID faltando.");
+
         var userId = Guid.Parse(userIdString!);
         var email = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue("email");
         var name = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue("name");
