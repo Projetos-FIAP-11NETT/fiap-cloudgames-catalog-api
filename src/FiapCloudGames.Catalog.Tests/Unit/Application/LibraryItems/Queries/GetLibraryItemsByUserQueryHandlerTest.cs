@@ -105,7 +105,6 @@ public class GetLibraryItemsByUserQueryHandlerTest
         var responses = result.ToList();
 
         responses.Should().HaveCount(3);
-        responses.Should().AllSatisfy(r => r.UserId.Should().Be(userId));
     }
 
     /// <summary>
@@ -141,7 +140,6 @@ public class GetLibraryItemsByUserQueryHandlerTest
         // Assert
         var response = result.Single();
 
-        response.UserId.Should().Be(userId);
         response.GameId.Should().Be(game.GameId);
         response.GameTitle.Should().Be(game.GameTitle);
         response.OrderId.Should().Be(game.OrderId);

@@ -20,7 +20,6 @@ public class GetLibraryItemsByUserQueryHandler(
 
         return library.Games.Select(g => new GetLibraryItemResponse
         {
-            UserId = library.UserId,
             GameId = g.GameId,
             GameTitle = g.GameTitle,
             OrderId = g.OrderId,
