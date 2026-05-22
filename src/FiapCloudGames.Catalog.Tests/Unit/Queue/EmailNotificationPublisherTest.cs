@@ -169,4 +169,67 @@ public class EmailNotificationPublisherTest
             It.IsAny<SendMessageRequest>(),
             token), Times.Once);
     }
+
+    /// <summary>
+    /// Verifica que o LogInformation é chamado antes e após o envio bem-sucedido,
+    /// garantindo rastreabilidade da operação nos logs do serviço.
+    /// </summary>
+    [Fact]
+    public async Task PublishAsync_WhenSucceeds_ShouldLogInformationTwice()
+    {
+        // Arrange
+        const string to = "log@test.com";
+        const string subject = "Teste de log";
+
+        _sqsClientMock
+            .Setup(s => s.SendMessageAsync(It.IsAny<SendMessageRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SendMessageResponse());
+
+        // Act
+        await _publisher.PublishAsync(to, subject, "Corpo");
+
+        // Assert
+        _loggerMock.Verify(
+            l => l.Log(
+                LogLevel.Information,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains(to) &&
+                    v.ToString()!.Contains(subject)),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Exactly(2));
+    }
+
+    /// <summary>
+    /// Verifica que o LogError é chamado quando o cliente SQS lança exceção,
+    /// garantindo que falhas no envio sejam devidamente registradas.
+    /// </summary>
+    [Fact]
+    public async Task PublishAsync_WhenSqsThrows_ShouldLogError()
+    {
+        // Arrange
+        const string to = "error@test.com";
+        const string subject = "Falha no envio";
+
+        _sqsClientMock
+            .Setup(s => s.SendMessageAsync(It.IsAny<SendMessageRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new AmazonSQSException("SQS unavailable"));
+
+        // Act
+        var act = async () => await _publisher.PublishAsync(to, subject, "Corpo");
+        await act.Should().ThrowAsync<AmazonSQSException>();
+
+        // Assert
+        _loggerMock.Verify(
+            l => l.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains(to) &&
+                    v.ToString()!.Contains(subject)),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+    }
 }

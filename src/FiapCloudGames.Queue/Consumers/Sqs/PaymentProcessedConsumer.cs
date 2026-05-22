@@ -54,6 +54,7 @@ public class PaymentProcessedConsumer(ILogger<PaymentProcessedConsumer> logger, 
             logger.LogError("[catalog-service] CorrelationId {correlationId} - PaymentProcessedConsumer - Order {orderId} - failed to update status.",
                 correlationId, message.OrderId);
     }
+
     private async Task ProcessRejectedPayment(IPaymentProcessed message)
     {
         logger.LogInformation("[catalog-service] CorrelationId {correlationId} - PaymentProcessedConsumer - Processing Reproved OrderId {orderId}",

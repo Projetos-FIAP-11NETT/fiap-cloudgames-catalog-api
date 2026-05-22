@@ -141,11 +141,11 @@ public class OrderPlacedPublisherTest
     }
 
     /// <summary>
-    /// Verifica que o LogInformation é chamado com orderId, userId e gameId,
+    /// Verifica que o LogInformation é chamado duas vezes (antes e após o envio),
     /// garantindo rastreabilidade da operação nos logs do serviço.
     /// </summary>
     [Fact]
-    public async Task PublishAsync_ShouldLogInformationBeforePublishing()
+    public async Task PublishAsync_WhenSucceeds_ShouldLogInformationTwice()
     {
         // Arrange
         const int orderId = 5;
@@ -167,7 +167,74 @@ public class OrderPlacedPublisherTest
                     v.ToString()!.Contains(gameId.ToString())),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Exactly(2));
+    }
+
+    /// <summary>
+    /// Verifica que o LogError é chamado quando o bus lança exceção,
+    /// garantindo que falhas no envio sejam devidamente registradas.
+    /// </summary>
+    [Fact]
+    public async Task PublishAsync_WhenBusThrows_ShouldLogError()
+    {
+        // Arrange
+        const int orderId = 7;
+        var userId = Guid.NewGuid();
+        var gameId = Guid.NewGuid();
+
+        _busMock
+            .Setup(b => b.Publish<IOrderPlaced>(
+                It.IsAny<object>(),
+                It.IsAny<IPipe<PublishContext<IOrderPlaced>>>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("SQS unavailable"));
+
+        // Act
+        var act = async () => await _publisher.PublishAsync(orderId, userId, gameId, 10m, "x@y.com", "Name");
+        await act.Should().ThrowAsync<InvalidOperationException>();
+
+        // Assert
+        _loggerMock.Verify(
+            l => l.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, _) =>
+                    v.ToString()!.Contains(orderId.ToString()) &&
+                    v.ToString()!.Contains(userId.ToString()) &&
+                    v.ToString()!.Contains(gameId.ToString())),
+                null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que o CorrelationId do accessor é atribuído ao contexto de publicação,
+    /// confirmando que a propriedade é corretamente repassada ao pipe do MassTransit.
+    /// </summary>
+    [Fact]
+    public async Task PublishAsync_ShouldAccessCorrelationIdFromAccessor()
+    {
+        // Arrange
+        IPipe<PublishContext<IOrderPlaced>>? capturedPipe = null;
+
+        _busMock
+            .Setup(b => b.Publish<IOrderPlaced>(
+                It.IsAny<object>(),
+                It.IsAny<IPipe<PublishContext<IOrderPlaced>>>(),
+                It.IsAny<CancellationToken>()))
+            .Callback<object, IPipe<PublishContext<IOrderPlaced>>, CancellationToken>(
+                (_, pipe, _) => capturedPipe = pipe)
+            .Returns(Task.CompletedTask);
+
+        // Act
+        await _publisher.PublishAsync(1, Guid.NewGuid(), Guid.NewGuid(), 10m, "a@b.com", "Test");
+
+        // Assert
+        capturedPipe.Should().NotBeNull();
+
+        var contextMock = new Mock<PublishContext<IOrderPlaced>>();
+        await capturedPipe!.Send(contextMock.Object);
+
+        contextMock.VerifySet(c => c.CorrelationId = _correlationId, Times.Once);
+    }
 }

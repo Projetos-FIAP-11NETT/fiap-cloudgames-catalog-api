@@ -23,19 +23,47 @@ public class EmailNotificationPublisher(
             "[catalog-service] Publishing email notification to SQS: To={To}, Subject={Subject}",
             to, subject);
 
-        var messageBody = JsonSerializer.Serialize(new
-        {
-            To = to,
-            Subject = subject,
-            Body = body,
-            CorrelationId = correlation.CorrelationId.ToString()
-        });
+        string messageBody;
 
-        await sqsClient.SendMessageAsync(new SendMessageRequest
+        try
         {
-            QueueUrl = sqsSettings.Value.EmailQueueUrl,
-            MessageBody = messageBody
-        },
-        cancellationToken);
+            messageBody = JsonSerializer.Serialize(new
+            {
+                To = to,
+                Subject = subject,
+                Body = body,
+                CorrelationId = correlation.CorrelationId.ToString()
+            });
+        }
+        catch (Exception)
+        {
+            logger.LogError("[catalog-service] Failed to serialize email notification message: To={To}, Subject={Subject}",
+                to, subject);
+            throw;
+        }
+
+        try
+        {
+            await sqsClient.SendMessageAsync(new SendMessageRequest
+            {
+                QueueUrl = sqsSettings.Value.EmailQueueUrl,
+                MessageBody = messageBody
+            },
+            cancellationToken);
+
+            logger.LogInformation(
+                "[catalog-service] Successfully published email notification to SQS: To={To}, Subject={Subject}",
+                to, subject);
+
+        }
+        catch (Exception)
+        {
+            logger.LogError(
+                "[catalog-service] Failed to publish email notification to SQS: To={To}, Subject={Subject}",
+                to, subject);
+            throw;
+        }
+
+        
     }
 }
