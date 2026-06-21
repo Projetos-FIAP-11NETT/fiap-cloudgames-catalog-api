@@ -1,0 +1,39 @@
+name: CI - Feature, Bugfix and Hotfix Validation
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+
+  # Permite executar o workflow maualmente      
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Baixa o código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Instala o SDK do .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      # Baixa dependências do NuGet
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Compila o código
+      - name: Build solution
+        run: dotnet build --configuration Release --no-restore
+
+      # Executa testes unitários
+      - name: Run unit tests
+        run: dotnet test --configuration Release --no-build --verbosity normal
