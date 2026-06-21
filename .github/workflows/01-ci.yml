@@ -7,7 +7,6 @@ on:
       - 'bugfix/**'
       - 'hotfix/**'
 
-  # Permite executar o workflow maualmente      
   workflow_dispatch:
 
 jobs:
@@ -16,24 +15,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Baixa o código
+      # 1. Baixa o código
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Instala o SDK do .NET
+      # 2. Instala .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
 
-      # Baixa dependências do NuGet
+      # 3. Diagnóstico do ambiente (IMPORTANTE)
+      - name: Show OS info
+        run: |
+          echo "=== OS INFO ==="
+          uname -a
+
+      - name: Show .NET info
+        run: |
+          echo "=== DOTNET INFO ==="
+          dotnet --info
+          echo "=== DOTNET VERSION ==="
+          dotnet --version
+
+      - name: Show locale
+        run: locale
+
+      - name: Show environment variables
+        run: printenv | sort
+
+      # 4. Restore
       - name: Restore dependencies
         run: dotnet restore src/FiapCloudGames.Catalog.slnx
 
-      # Compila o código
+      # 5. Build
       - name: Build solution
         run: dotnet build src/FiapCloudGames.Catalog.slnx --configuration Release --no-restore
 
-      # Executa testes unitários
-      - name: Run unit tests
-        run: dotnet test src/FiapCloudGames.Catalog.slnx --configuration Release --no-build --verbosity normal
+      # 6. Testes (modo diagnóstico)
+      - name: Run unit tests (detailed)
+        run: dotnet test src/FiapCloudGames.Catalog.slnx --configuration Release --no-build --verbosity detailed --logger "console;verbosity=detailed"
