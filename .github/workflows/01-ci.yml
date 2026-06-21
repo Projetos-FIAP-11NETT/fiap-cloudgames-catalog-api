@@ -28,12 +28,12 @@ jobs:
 
       # Baixa dependências do NuGet
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore src/FiapCloudGames.Catalog.slnx
 
       # Compila o código
       - name: Build solution
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build src/FiapCloudGames.Catalog.slnx --configuration Release --no-restore
 
       # Executa testes unitários
       - name: Run unit tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
+        run: dotnet test src/FiapCloudGames.Catalog.slnx --configuration Release --no-build --verbosity normal
