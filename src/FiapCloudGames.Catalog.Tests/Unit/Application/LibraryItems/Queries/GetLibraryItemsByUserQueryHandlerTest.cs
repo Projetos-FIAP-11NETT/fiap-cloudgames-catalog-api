@@ -7,8 +7,8 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.LibraryItems.Queries;
 
 /// <summary>
-/// Testes unit·rios do GetLibraryItemsByUserQueryHandler, respons·vel por retornar
-/// os itens da biblioteca de um usu·rio a partir do repositÛrio MongoDB.
+/// Testes unit√°rios do GetLibraryItemsByUserQueryHandler, respons√°vel por retornar
+/// os itens da biblioteca de um usu√°rio a partir do reposit√≥rio MongoDB.
 /// </summary>
 public class GetLibraryItemsByUserQueryHandlerTest
 {
@@ -42,7 +42,7 @@ public class GetLibraryItemsByUserQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que o UserId da query È repassado corretamente ao repositÛrio MongoDB.
+    /// Garante que o UserId da query √© repassado corretamente ao reposit√≥rio MongoDB.
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCallMongoRepositoryWithCorrectUserId()
@@ -63,7 +63,7 @@ public class GetLibraryItemsByUserQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma coleÁ„o vazia È retornada quando o usu·rio n„o possui
+    /// Garante que uma cole√ß√£o vazia √© retornada quando o usu√°rio n√£o possui
     /// biblioteca registrada no MongoDB.
     /// </summary>
     [Fact]
@@ -84,7 +84,7 @@ public class GetLibraryItemsByUserQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que todos os jogos da biblioteca s„o retornados mapeados
+    /// Garante que todos os jogos da biblioteca s√£o retornados mapeados
     /// para GetLibraryItemResponse quando a biblioteca existe.
     /// </summary>
     [Fact]
@@ -108,7 +108,7 @@ public class GetLibraryItemsByUserQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que os campos do DTO s„o mapeados corretamente a partir do GameInLibraryReadModel.
+    /// Garante que os campos do DTO s√£o mapeados corretamente a partir do GameInLibraryReadModel.
     /// </summary>
     [Fact]
     public async Task Handle_WhenLibraryHasOneGame_ShouldMapAllFieldsCorrectly()
@@ -147,8 +147,8 @@ public class GetLibraryItemsByUserQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma coleÁ„o vazia È retornada quando a biblioteca
-    /// do usu·rio existe mas n„o possui jogos.
+    /// Garante que uma cole√ß√£o vazia √© retornada quando a biblioteca
+    /// do usu√°rio existe mas n√£o possui jogos.
     /// </summary>
     [Fact]
     public async Task Handle_WhenLibraryHasNoGames_ShouldReturnEmptyCollection()

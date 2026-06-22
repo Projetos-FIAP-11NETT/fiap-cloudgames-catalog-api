@@ -12,8 +12,8 @@ using System.Text.Json;
 namespace FiapCloudGames.Catalog.Tests.Unit.Queue;
 
 /// <summary>
-/// Testes unitários do EmailNotificationPublisher, responsável por publicar
-/// notificações de e-mail na fila SQS.
+/// Testes unitÃ¡rios do EmailNotificationPublisher, responsÃ¡vel por publicar
+/// notificaÃ§Ãµes de e-mail na fila SQS.
 /// </summary>
 public class EmailNotificationPublisherTest
 {
@@ -42,7 +42,7 @@ public class EmailNotificationPublisherTest
     }
 
     /// <summary>
-    /// Garante que, ao publicar uma notificação de e-mail, o cliente SQS é chamado
+    /// Garante que, ao publicar uma notificaÃ§Ã£o de e-mail, o cliente SQS Ã© chamado
     /// com a URL da fila correta e o corpo da mensagem contendo todos os campos esperados.
     /// </summary>
     [Fact]
@@ -50,7 +50,7 @@ public class EmailNotificationPublisherTest
     {
         // Arrange
         const string to = "user@test.com";
-        const string subject = "Confirmação de pedido";
+        const string subject = "ConfirmaÃ§Ã£o de pedido";
         const string body = "Seu pedido foi confirmado.";
 
         _sqsClientMock
@@ -67,7 +67,7 @@ public class EmailNotificationPublisherTest
     }
 
     /// <summary>
-    /// Garante que o corpo da mensagem enviada ao SQS contém os campos
+    /// Garante que o corpo da mensagem enviada ao SQS contÃ©m os campos
     /// To, Subject, Body e CorrelationId corretamente serializados.
     /// </summary>
     [Fact]
@@ -75,7 +75,7 @@ public class EmailNotificationPublisherTest
     {
         // Arrange
         const string to = "user@test.com";
-        const string subject = "Confirmação de pedido";
+        const string subject = "ConfirmaÃ§Ã£o de pedido";
         const string body = "Seu pedido foi confirmado.";
         var correlationId = Guid.NewGuid();
 
@@ -129,7 +129,7 @@ public class EmailNotificationPublisherTest
     }
 
     /// <summary>
-    /// Garante que exceções lançadas pelo cliente SQS se propagam corretamente ao chamador.
+    /// Garante que exceÃ§Ãµes lanÃ§adas pelo cliente SQS se propagam corretamente ao chamador.
     /// </summary>
     [Fact]
     public async Task PublishAsync_WhenSqsThrows_ShouldPropagateException()
@@ -148,7 +148,7 @@ public class EmailNotificationPublisherTest
     }
 
     /// <summary>
-    /// Garante que o CancellationToken fornecido é repassado ao cliente SQS.
+    /// Garante que o CancellationToken fornecido Ã© repassado ao cliente SQS.
     /// </summary>
     [Fact]
     public async Task PublishAsync_WhenCancellationTokenProvided_ShouldPassItToSqsClient()
@@ -171,8 +171,8 @@ public class EmailNotificationPublisherTest
     }
 
     /// <summary>
-    /// Verifica que o LogInformation é chamado antes e após o envio bem-sucedido,
-    /// garantindo rastreabilidade da operação nos logs do serviço.
+    /// Verifica que o LogInformation Ã© chamado antes e apÃ³s o envio bem-sucedido,
+    /// garantindo rastreabilidade da operaÃ§Ã£o nos logs do serviÃ§o.
     /// </summary>
     [Fact]
     public async Task PublishAsync_WhenSucceeds_ShouldLogInformationTwice()
@@ -202,7 +202,7 @@ public class EmailNotificationPublisherTest
     }
 
     /// <summary>
-    /// Verifica que o LogError é chamado quando o cliente SQS lança exceção,
+    /// Verifica que o LogError Ã© chamado quando o cliente SQS lanÃ§a exceÃ§Ã£o,
     /// garantindo que falhas no envio sejam devidamente registradas.
     /// </summary>
     [Fact]
