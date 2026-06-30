@@ -8,7 +8,7 @@ using System.Text.Json;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Games.Queries;
 
 /// <summary>
-/// Testes unit·rios do GetGameQueryHandler, respons·vel por buscar jogos
+/// Testes unit√°rios do GetGameQueryHandler, respons√°vel por buscar jogos
 /// a partir do cache Redis, construindo a chave correta com base no filtro
 /// e desserializando o resultado retornado.
 /// </summary>
@@ -29,14 +29,14 @@ public class GetGameQueryHandlerTest
         JsonSerializer.Serialize(games);
 
     /// <summary>
-    /// Cria uma lista de GetGameResponse com valores padr„o.
+    /// Cria uma lista de GetGameResponse com valores padr√£o.
     /// </summary>
     private static List<GetGameResponse> CreateGameResponses(int count = 2) =>
         Enumerable.Range(1, count).Select(i => new GetGameResponse
         {
             Id = Guid.NewGuid(),
             Title = $"Game {i}",
-            Description = $"DescriÁ„o do Game {i}",
+            Description = $"Descri√ß√£o do Game {i}",
             ReleaseDate = new DateTime(2020, 1, i),
             Developer = "Developer Studio",
             Price = 59.90m * i,
@@ -44,8 +44,8 @@ public class GetGameQueryHandlerTest
         }).ToList();
 
     /// <summary>
-    /// Garante que, quando o filtro È informado, a chave do Redis È construÌda
-    /// com o filtro em letras min˙sculas.
+    /// Garante que, quando o filtro √© informado, a chave do Redis √© constru√≠da
+    /// com o filtro em letras min√∫sculas.
     /// </summary>
     [Fact]
     public async Task Handle_WhenFilterProvided_ShouldUseFilterLowercaseAsKey()
@@ -69,8 +69,8 @@ public class GetGameQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando o filtro n„o È informado (null), a chave padr„o
-    /// "games:" È utilizada.
+    /// Garante que, quando o filtro n√£o √© informado (null), a chave padr√£o
+    /// "games:" √© utilizada.
     /// </summary>
     [Fact]
     public async Task Handle_WhenFilterIsNull_ShouldUseDefaultKey()
@@ -94,8 +94,8 @@ public class GetGameQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando o filtro È uma string vazia, a chave padr„o
-    /// "games:" È utilizada.
+    /// Garante que, quando o filtro √© uma string vazia, a chave padr√£o
+    /// "games:" √© utilizada.
     /// </summary>
     [Fact]
     public async Task Handle_WhenFilterIsEmpty_ShouldUseDefaultKey()
@@ -119,8 +119,8 @@ public class GetGameQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando o filtro È um espaÁo em branco, a chave padr„o
-    /// "games:" È utilizada.
+    /// Garante que, quando o filtro √© um espa√ßo em branco, a chave padr√£o
+    /// "games:" √© utilizada.
     /// </summary>
     [Fact]
     public async Task Handle_WhenFilterIsWhiteSpace_ShouldUseDefaultKey()
@@ -144,7 +144,7 @@ public class GetGameQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que os campos do DTO s„o desserializados corretamente
+    /// Garante que os campos do DTO s√£o desserializados corretamente
     /// a partir do JSON retornado pelo Redis.
     /// </summary>
     [Fact]
@@ -184,8 +184,8 @@ public class GetGameQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma coleÁ„o vazia È retornada quando o Redis
-    /// n„o encontra jogos para o filtro informado.
+    /// Garante que uma cole√ß√£o vazia √© retornada quando o Redis
+    /// n√£o encontra jogos para o filtro informado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenCacheReturnsEmptyList_ShouldReturnEmptyCollection()
@@ -205,7 +205,7 @@ public class GetGameQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que o filtro È convertido para letras min˙sculas independente
+    /// Garante que o filtro √© convertido para letras min√∫sculas independente
     /// do casing original informado na query.
     /// </summary>
     [Theory]

@@ -1,0 +1,68 @@
+name: CI - Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore FiapCloudGames.Catalog.slnx
+
+      - name: Build solution
+        run: dotnet build FiapCloudGames.Catalog.slnx --configuration Release --no-restore
+
+      - name: Verify code formatting
+        run: dotnet format FiapCloudGames.Catalog.slnx --verify-no-changes
+
+      - name: Run tests with coverage
+        run: >
+          dotnet test
+          FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj
+          --configuration Release
+          --no-build
+          --collect:"XPlat Code Coverage"
+
+      - name: Check vulnerable packages
+        shell: bash
+        run: |
+          dotnet package list --vulnerable > vulnerable.txt
+
+          cat vulnerable.txt
+
+          if grep -q "has the following vulnerable packages" vulnerable.txt; then
+            echo "::error::Vulnerable NuGet packages were found."
+            exit 1
+          fi
+
+      - name: Check outdated packages
+        shell: bash
+        run: |
+          dotnet package list --outdated > outdated.txt
+
+          cat outdated.txt
+
+          if grep -q "Project" outdated.txt; then
+            echo "::warning::Outdated NuGet packages were found."
+          fi

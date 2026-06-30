@@ -8,8 +8,8 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Categories.Commands;
 
 /// <summary>
-/// Testes unit·rios do DeleteCategoryCommandHandler, respons·vel por remover uma categoria
-/// validando sua existÍncia e persistindo a remoÁ„o.
+/// Testes unit√°rios do DeleteCategoryCommandHandler, respons√°vel por remover uma categoria
+/// validando sua exist√™ncia e persistindo a remo√ß√£o.
 /// </summary>
 public class DeleteCategoryCommandHandlerTest
 {
@@ -22,13 +22,13 @@ public class DeleteCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria uma Category v·lida para uso nos testes.
+    /// Cria uma Category v√°lida para uso nos testes.
     /// </summary>
     private static Category CreateCategory(string name = "RPG") => new(name);
 
     /// <summary>
-    /// Garante que, quando a categoria existe e SaveChanges È bem-sucedido,
-    /// a categoria È removida e true È retornado.
+    /// Garante que, quando a categoria existe e SaveChanges √© bem-sucedido,
+    /// a categoria √© removida e true √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldRemoveCategoryAndReturnTrue()
@@ -55,8 +55,8 @@ public class DeleteCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma NotFoundException È lanÁada quando a categoria
-    /// informada no comando n„o existe no repositÛrio.
+    /// Garante que uma NotFoundException √© lan√ßada quando a categoria
+    /// informada no comando n√£o existe no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenCategoryNotFound_ShouldThrowNotFoundException()
@@ -80,7 +80,7 @@ public class DeleteCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que false È retornado quando SaveChanges falha apÛs a remoÁ„o da categoria.
+    /// Garante que false √© retornado quando SaveChanges falha ap√≥s a remo√ß√£o da categoria.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldReturnFalse()
@@ -106,7 +106,7 @@ public class DeleteCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o Id informado no comando È repassado corretamente ao repositÛrio
+    /// Garante que o Id informado no comando √© repassado corretamente ao reposit√≥rio
     /// para busca da categoria a ser removida.
     /// </summary>
     [Fact]

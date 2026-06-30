@@ -1,4 +1,4 @@
-﻿using FiapCloudGames.Catalog.Domain.Entities;
+using FiapCloudGames.Catalog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiapCloudGames.Catalog.Infrastructure.Data.Relational;

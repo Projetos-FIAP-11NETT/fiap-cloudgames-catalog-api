@@ -8,8 +8,8 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Categories.Commands;
 
 /// <summary>
-/// Testes unit·rios do UpdateCategoryCommandHandler, respons·vel por atualizar
-/// uma categoria validando sua existÍncia e persistindo a alteraÁ„o.
+/// Testes unit√°rios do UpdateCategoryCommandHandler, respons√°vel por atualizar
+/// uma categoria validando sua exist√™ncia e persistindo a altera√ß√£o.
 /// </summary>
 public class UpdateCategoryCommandHandlerTest
 {
@@ -22,13 +22,13 @@ public class UpdateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria uma Category v·lida para uso nos testes.
+    /// Cria uma Category v√°lida para uso nos testes.
     /// </summary>
     private static Category CreateCategory(string name = "RPG") => new(name);
 
     /// <summary>
-    /// Garante que, quando a categoria existe e SaveChanges È bem-sucedido,
-    /// a categoria È atualizada e true È retornado.
+    /// Garante que, quando a categoria existe e SaveChanges √© bem-sucedido,
+    /// a categoria √© atualizada e true √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldUpdateCategoryAndReturnTrue()
@@ -55,8 +55,8 @@ public class UpdateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma NotFoundException È lanÁada quando a categoria
-    /// informada no comando n„o existe no repositÛrio.
+    /// Garante que uma NotFoundException √© lan√ßada quando a categoria
+    /// informada no comando n√£o existe no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenCategoryNotFound_ShouldThrowNotFoundException()
@@ -80,14 +80,14 @@ public class UpdateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que false È retornado quando SaveChanges falha apÛs a atualizaÁ„o da categoria.
+    /// Garante que false √© retornado quando SaveChanges falha ap√≥s a atualiza√ß√£o da categoria.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldReturnFalse()
     {
         // Arrange
         var category = CreateCategory();
-        var command = new UpdateCategoryCommand(category.Id, "EstratÈgia");
+        var command = new UpdateCategoryCommand(category.Id, "Estrat√©gia");
 
         _categoryRepositoryMock
             .Setup(r => r.GetByIdAsync(command.Id))
@@ -106,7 +106,7 @@ public class UpdateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que a categoria atualizada È criada com o Id e o Nome
+    /// Garante que a categoria atualizada √© criada com o Id e o Nome
     /// informados no comando.
     /// </summary>
     [Fact]
@@ -132,7 +132,7 @@ public class UpdateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o Id informado no comando È repassado corretamente ao repositÛrio
+    /// Garante que o Id informado no comando √© repassado corretamente ao reposit√≥rio
     /// para busca da categoria a ser atualizada.
     /// </summary>
     [Fact]
