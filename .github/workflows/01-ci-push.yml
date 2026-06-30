@@ -1,4 +1,4 @@
-name: CI - Feature, Bugfix and Hotfix Validation
+name: CI - Push Validation
 
 on:
   push:
