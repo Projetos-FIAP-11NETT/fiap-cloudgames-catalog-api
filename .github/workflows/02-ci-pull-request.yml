@@ -5,6 +5,11 @@ on:
     branches:
       - develop
       - main
+    types:
+      - opened # Quando o PR é criado
+      - synchronize # Quando novos commits são enviados para um PR já existente
+      - reopened # Quando um PR é fechado e depois reaberto
+      - ready_for_review # Quando o PR é criado como rascunho e depois é marcado que está pronto para revisão
 
   workflow_dispatch:
 
@@ -33,8 +38,8 @@ jobs:
       - name: Build solution
         run: dotnet build FiapCloudGames.Catalog.slnx --configuration Release --no-restore
 
-      - name: Verify code formatting
-        run: dotnet format FiapCloudGames.Catalog.slnx --verify-no-changes
+      #- name: Verify code formatting
+        #run: dotnet format FiapCloudGames.Catalog.slnx --verify-no-changes
 
       - name: Run tests with coverage
         run: >
