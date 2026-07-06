@@ -69,6 +69,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
+            -f docker/Dockerfile \
             -t $ECR_REPOSITORY:$IMAGE_TAG \
             -t $ECR_REPOSITORY:latest \
             .
