@@ -30,6 +30,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug variables
+        run: |
+          echo "AWS_REGION='${{ vars.AWS_REGION }}'"
+          echo "AWS_ACCOUNT_ID='${{ vars.AWS_ACCOUNT_ID }}'"
+          echo "ECR_REPOSITORY='${{ vars.ECR_REPOSITORY }}'"        
+
+      - name: Debug env
+        run: |
+          echo "AWS_REGION=$AWS_REGION"
+          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID"
+          echo "ECR_REPOSITORY=$ECR_REPOSITORY"          
+
       # Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
