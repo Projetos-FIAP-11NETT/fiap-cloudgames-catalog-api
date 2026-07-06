@@ -78,6 +78,7 @@ jobs:
 
       # Build da imagem Docker
       - name: Build Docker Image
+        working-directory: .
         run: |
           docker build \
             -f docker/Dockerfile \
