@@ -28,19 +28,7 @@ jobs:
     steps:
       # Checkout
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Debug variables
-        run: |
-          echo "AWS_REGION='${{ vars.AWS_REGION }}'"
-          echo "AWS_ACCOUNT_ID='${{ vars.AWS_ACCOUNT_ID }}'"
-          echo "ECR_REPOSITORY='${{ vars.ECR_REPOSITORY }}'"        
-
-      - name: Debug env
-        run: |
-          echo "AWS_REGION=$AWS_REGION"
-          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID"
-          echo "ECR_REPOSITORY=$ECR_REPOSITORY"          
+        uses: actions/checkout@v4              
 
       # Setup .NET
       - name: Setup .NET
@@ -70,6 +58,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
       # Login no Amazon ECR
