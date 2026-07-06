@@ -65,6 +65,17 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Show repository structure
+        run: |
+          pwd
+          ls -la
+          echo ""
+          echo "----- src -----"
+          ls -la src || true
+          echo ""
+          echo "----- docker -----"
+          ls -la docker || true
+
       # Build da imagem Docker
       - name: Build Docker Image
         run: |
