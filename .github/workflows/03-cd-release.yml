@@ -81,7 +81,7 @@ jobs:
         working-directory: .
         run: |
           docker build \
-            -f docker/Dockerfile \
+            -f docker/dockerfile \
             -t $ECR_REPOSITORY:$IMAGE_TAG \
             -t $ECR_REPOSITORY:latest \
             .
