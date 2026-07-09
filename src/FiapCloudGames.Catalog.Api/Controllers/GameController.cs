@@ -1,7 +1,7 @@
-using FiapCloudGames.Catalog.Application.GameFeature.Commands.CreateGame;
-using FiapCloudGames.Catalog.Application.GameFeature.Commands.DeleteGame;
-using FiapCloudGames.Catalog.Application.GameFeature.Commands.UpdateGame;
-using FiapCloudGames.Catalog.Application.GameFeature.Queries.GetGame;
+using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.CreateGame;
+using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.DeleteGame;
+using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.UpdateGame;
+using FiapCloudGames.Catalog.Application.Features.GameFeature.Queries.GetGame;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

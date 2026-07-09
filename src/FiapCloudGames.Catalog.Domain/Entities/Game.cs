@@ -30,6 +30,19 @@ public class Game
         Validate();
     }
 
+    public void Update(string title, string description, DateTime releaseDate, string developer, decimal price, IEnumerable<Category> categories)
+    {
+        Title = title;
+        Description = description;
+        ReleaseDate = releaseDate;
+        Developer = developer;
+        Price = price;
+        _categories.Clear();
+        _categories.AddRange(categories);
+
+        Validate();
+    }
+
     public void Validate()
     {
         if (string.IsNullOrWhiteSpace(Title))

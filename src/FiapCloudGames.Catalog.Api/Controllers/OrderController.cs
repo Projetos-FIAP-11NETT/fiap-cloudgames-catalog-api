@@ -1,10 +1,10 @@
-using System.Security.Claims;
-using FiapCloudGames.Catalog.Application.OrderFeature.Commands.CreateOrder;
-using FiapCloudGames.Catalog.Application.OrderFeature.Queries.GetAllOrders;
-using FiapCloudGames.Catalog.Application.OrderFeature.Queries.GetMyOrders;
+using FiapCloudGames.Catalog.Application.Features.OrderFeature.Commands.CreateOrder;
+using FiapCloudGames.Catalog.Application.Features.OrderFeature.Queries.GetAllOrders;
+using FiapCloudGames.Catalog.Application.Features.OrderFeature.Queries.GetMyOrders;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FiapCloudGames.Catalog.Api.Controllers;
 
@@ -38,6 +38,10 @@ public class OrderController
     public async Task<IActionResult> CreateAsync([FromBody] CreateOrderRequest request)
     {
         var userIdString = User.FindFirstValue("system_user_id");
+
+        if (string.IsNullOrWhiteSpace(userIdString))
+            return BadRequest("User ID faltando.");
+
         var userId = Guid.Parse(userIdString!);
         var email = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue("email");
         var name = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue("name");
