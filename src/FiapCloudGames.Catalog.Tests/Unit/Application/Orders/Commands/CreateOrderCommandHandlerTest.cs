@@ -9,8 +9,8 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Orders.Commands;
 
 /// <summary>
-/// Testes unit·rios do CreateOrderCommandHandler, respons·vel por criar
-/// pedidos validando regras de negÛcio como jogo inexistente, jogo j· na biblioteca
+/// Testes unit√°rios do CreateOrderCommandHandler, respons√°vel por criar
+/// pedidos validando regras de neg√≥cio como jogo inexistente, jogo j√° na biblioteca
 /// e pedido pendente duplicado.
 /// </summary>
 public class CreateOrderCommandHandlerTest
@@ -31,14 +31,14 @@ public class CreateOrderCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria um Game v·lido para uso nos testes.
+    /// Cria um Game v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame() =>
-        new("Game Title", "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new("Game Title", "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
-    /// Cria um CreateOrderCommand com valores padr„o.
+    /// Cria um CreateOrderCommand com valores padr√£o.
     /// </summary>
     private static CreateOrderCommand BuildCommand(Guid? userId = null, Guid? gameId = null) =>
         new(
@@ -49,7 +49,7 @@ public class CreateOrderCommandHandlerTest
         );
 
     /// <summary>
-    /// Garante que, quando todos os dados s„o v·lidos, o pedido È criado e publicado
+    /// Garante que, quando todos os dados s√£o v√°lidos, o pedido √© criado e publicado
     /// na fila, retornando true.
     /// </summary>
     [Fact]
@@ -87,8 +87,8 @@ public class CreateOrderCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando o jogo
-    /// informado no comando n„o existe no repositÛrio.
+    /// Garante que uma BusinessException √© lan√ßada quando o jogo
+    /// informado no comando n√£o existe no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameNotFound_ShouldThrowBusinessException()
@@ -103,12 +103,12 @@ public class CreateOrderCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<BusinessException>()
-            .WithMessage($"Jogo com Id '{command.GameId}' n„o encontrado.");
+            .WithMessage($"Jogo com Id '{command.GameId}' n√£o encontrado.");
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando o usu·rio
-    /// j· possui o jogo na sua biblioteca.
+    /// Garante que uma BusinessException √© lan√ßada quando o usu√°rio
+    /// j√° possui o jogo na sua biblioteca.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameAlreadyInLibrary_ShouldThrowBusinessException()
@@ -127,12 +127,12 @@ public class CreateOrderCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<BusinessException>()
-            .WithMessage("Usu·rio j· possui esse jogo");
+            .WithMessage("Usu√°rio j√° possui esse jogo");
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando o usu·rio
-    /// j· possui um pedido com status OrderStatus.Pendente para o mesmo jogo.
+    /// Garante que uma BusinessException √© lan√ßada quando o usu√°rio
+    /// j√° possui um pedido com status OrderStatus.Pendente para o mesmo jogo.
     /// </summary>
     [Fact]
     public async Task Handle_WhenPendingOrderAlreadyExists_ShouldThrowBusinessException()
@@ -152,12 +152,12 @@ public class CreateOrderCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<BusinessException>()
-            .WithMessage("Usu·rio j· possui um pedido pendente para esse jogo");
+            .WithMessage("Usu√°rio j√° possui um pedido pendente para esse jogo");
     }
 
     /// <summary>
-    /// Garante que o repositÛrio de pedidos n„o È chamado para criar o pedido
-    /// quando o jogo n„o È encontrado.
+    /// Garante que o reposit√≥rio de pedidos n√£o √© chamado para criar o pedido
+    /// quando o jogo n√£o √© encontrado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameNotFound_ShouldNotCallAddOrderAsync()
@@ -174,7 +174,7 @@ public class CreateOrderCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o publisher n„o È chamado quando o jogo j· est· na biblioteca do usu·rio.
+    /// Garante que o publisher n√£o √© chamado quando o jogo j√° est√° na biblioteca do usu√°rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameAlreadyInLibrary_ShouldNotPublishEvent()

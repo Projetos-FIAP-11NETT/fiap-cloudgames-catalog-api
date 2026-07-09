@@ -1,0 +1,41 @@
+name: CI - Push Validation
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore FiapCloudGames.Catalog.slnx
+
+      - name: Build solution
+        run: dotnet build FiapCloudGames.Catalog.slnx --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: >
+          dotnet test
+          FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj
+          --configuration Release
+          --no-build

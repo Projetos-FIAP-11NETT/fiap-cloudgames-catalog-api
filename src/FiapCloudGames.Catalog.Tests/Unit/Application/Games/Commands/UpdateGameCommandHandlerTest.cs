@@ -9,9 +9,9 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Games.Commands;
 
 /// <summary>
-/// Testes unit·rios do UpdateGameCommandHandler, respons·vel por atualizar um jogo
-/// validando sua existÍncia, duplicidade de tÌtulo e desenvolvedor, obrigatoriedade
-/// de categorias, persistÍncia e invalidaÁ„o do cache no Redis.
+/// Testes unit√°rios do UpdateGameCommandHandler, respons√°vel por atualizar um jogo
+/// validando sua exist√™ncia, duplicidade de t√≠tulo e desenvolvedor, obrigatoriedade
+/// de categorias, persist√™ncia e invalida√ß√£o do cache no Redis.
 /// </summary>
 public class UpdateGameCommandHandlerTest
 {
@@ -29,14 +29,14 @@ public class UpdateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria um Game v·lido para uso nos testes.
+    /// Cria um Game v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame() =>
-        new("Game Title", "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new("Game Title", "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
-    /// Cria um UpdateGameCommand com valores padr„o.
+    /// Cria um UpdateGameCommand com valores padr√£o.
     /// </summary>
     private static UpdateGameCommand BuildCommand(
         Guid? id = null,
@@ -46,7 +46,7 @@ public class UpdateGameCommandHandlerTest
         new(
             Id: id ?? Guid.NewGuid(),
             Title: title,
-            Description: "DescriÁ„o atualizada do jogo.",
+            Description: "Descri√ß√£o atualizada do jogo.",
             ReleaseDate: new DateTime(2021, 6, 1),
             Developer: developer,
             Price: 79.90m,
@@ -54,7 +54,7 @@ public class UpdateGameCommandHandlerTest
         );
 
     /// <summary>
-    /// Cria uma lista de categorias v·lidas para uso nos testes.
+    /// Cria uma lista de categorias v√°lidas para uso nos testes.
     /// </summary>
     private static List<Category> CreateCategories(int count = 1) =>
         Enumerable.Range(1, count)
@@ -62,8 +62,8 @@ public class UpdateGameCommandHandlerTest
             .ToList();
 
     /// <summary>
-    /// Garante que, quando todos os dados s„o v·lidos, o jogo È atualizado,
-    /// o cache do Redis È invalidado e true È retornado.
+    /// Garante que, quando todos os dados s√£o v√°lidos, o jogo √© atualizado,
+    /// o cache do Redis √© invalidado e true √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldUpdateGameAndInvalidateCacheAndReturnTrue()
@@ -101,8 +101,8 @@ public class UpdateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando o jogo
-    /// informado no comando n„o existe no repositÛrio.
+    /// Garante que uma BusinessException √© lan√ßada quando o jogo
+    /// informado no comando n√£o existe no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameNotFound_ShouldThrowBusinessException()
@@ -129,8 +129,8 @@ public class UpdateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando j· existe outro jogo
-    /// com o mesmo tÌtulo e desenvolvedor cadastrado.
+    /// Garante que uma BusinessException √© lan√ßada quando j√° existe outro jogo
+    /// com o mesmo t√≠tulo e desenvolvedor cadastrado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenDuplicateGameExists_ShouldThrowBusinessException()
@@ -151,7 +151,7 @@ public class UpdateGameCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<BusinessException>()
-            .WithMessage("*tÌtulo*desenvolvedor*");
+            .WithMessage("*t√≠tulo*desenvolvedor*");
 
         _categoryRepositoryMock.Verify(r => r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()), Times.Never);
         _gameRepositoryMock.Verify(r => r.Update(It.IsAny<Game>()), Times.Never);
@@ -160,8 +160,8 @@ public class UpdateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando nenhuma categoria
-    /// v·lida È encontrada para os IDs informados.
+    /// Garante que uma BusinessException √© lan√ßada quando nenhuma categoria
+    /// v√°lida √© encontrada para os IDs informados.
     /// </summary>
     [Fact]
     public async Task Handle_WhenNoCategoriesFound_ShouldThrowBusinessException()
@@ -193,8 +193,8 @@ public class UpdateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o cache do Redis n„o È invalidado quando SaveChanges falha
-    /// e false È retornado.
+    /// Garante que o cache do Redis n√£o √© invalidado quando SaveChanges falha
+    /// e false √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldNotInvalidateCacheAndReturnFalse()
@@ -227,15 +227,15 @@ public class UpdateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que a verificaÁ„o de duplicidade usa o Id do jogo sendo atualizado
-    /// para excluÌ-lo da comparaÁ„o (overload com excludeId).
+    /// Garante que a verifica√ß√£o de duplicidade usa o Id do jogo sendo atualizado
+    /// para exclu√≠-lo da compara√ß√£o (overload com excludeId).
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCheckDuplicityExcludingCurrentGameId()
     {
         // Arrange
         var game = CreateGame();
-        var command = BuildCommand(id: game.Id, title: "Novo TÌtulo", developer: "Novo Dev");
+        var command = BuildCommand(id: game.Id, title: "Novo T√≠tulo", developer: "Novo Dev");
 
         _gameRepositoryMock
             .Setup(r => r.GetByIdWithCategoriesAsync(command.Id))
@@ -251,12 +251,12 @@ public class UpdateGameCommandHandlerTest
         await act.Should().ThrowAsync<BusinessException>();
 
         _gameRepositoryMock.Verify(r =>
-            r.GameAlreadyExistsByTitle("Novo TÌtulo", "Novo Dev", game.Id), Times.Once);
+            r.GameAlreadyExistsByTitle("Novo T√≠tulo", "Novo Dev", game.Id), Times.Once);
     }
 
     /// <summary>
-    /// Garante que o jogo È atualizado com m˙ltiplas categorias quando todas
-    /// s„o encontradas no repositÛrio.
+    /// Garante que o jogo √© atualizado com m√∫ltiplas categorias quando todas
+    /// s√£o encontradas no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenMultipleCategoriesProvided_ShouldUpdateGameWithAllCategories()

@@ -8,8 +8,8 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Orders.Queries;
 
 /// <summary>
-/// Testes unit·rios do GetMyOrdersQueryHandler, respons·vel por retornar
-/// os pedidos de um usu·rio especÌfico mapeados para o DTO GetOrderResponse.
+/// Testes unit√°rios do GetMyOrdersQueryHandler, respons√°vel por retornar
+/// os pedidos de um usu√°rio espec√≠fico mapeados para o DTO GetOrderResponse.
 /// </summary>
 public class GetMyOrdersQueryHandlerTest
 {
@@ -22,14 +22,14 @@ public class GetMyOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Cria um Game v·lido para uso nos testes.
+    /// Cria um Game v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame(string title = "Game Title") =>
-        new(title, "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new(title, "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
-    /// Garante que o UserId da query È repassado corretamente ao repositÛrio.
+    /// Garante que o UserId da query √© repassado corretamente ao reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCallRepositoryWithCorrectUserId()
@@ -50,7 +50,7 @@ public class GetMyOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando o usu·rio possui pedidos, todos s„o retornados
+    /// Garante que, quando o usu√°rio possui pedidos, todos s√£o retornados
     /// corretamente mapeados para GetOrderResponse.
     /// </summary>
     [Fact]
@@ -87,7 +87,7 @@ public class GetMyOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que os campos do DTO s„o mapeados corretamente a partir da entidade Order.
+    /// Garante que os campos do DTO s√£o mapeados corretamente a partir da entidade Order.
     /// </summary>
     [Fact]
     public async Task Handle_WhenUserHasOneOrder_ShouldMapAllFieldsCorrectly()
@@ -117,7 +117,7 @@ public class GetMyOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma coleÁ„o vazia È retornada quando o usu·rio n„o possui pedidos.
+    /// Garante que uma cole√ß√£o vazia √© retornada quando o usu√°rio n√£o possui pedidos.
     /// </summary>
     [Fact]
     public async Task Handle_WhenUserHasNoOrders_ShouldReturnEmptyCollection()
@@ -137,7 +137,7 @@ public class GetMyOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que pedidos de outros usu·rios n„o s„o retornados para o usu·rio solicitante.
+    /// Garante que pedidos de outros usu√°rios n√£o s√£o retornados para o usu√°rio solicitante.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOtherUsersHaveOrders_ShouldReturnOnlyRequestingUserOrders()

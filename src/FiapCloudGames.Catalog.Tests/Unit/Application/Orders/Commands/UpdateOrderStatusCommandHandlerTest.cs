@@ -9,7 +9,7 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Orders.Commands;
 
 /// <summary>
-/// Testes unit·rios do UpdateOrderStatusCommandHandler, respons·vel por
+/// Testes unit√°rios do UpdateOrderStatusCommandHandler, respons√°vel por
 /// atualizar o status de um pedido para Aprovado, Rejeitado ou Cancelado.
 /// </summary>
 public class UpdateOrderStatusCommandHandlerTest
@@ -23,10 +23,10 @@ public class UpdateOrderStatusCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria um <see cref="Game"/> v·lido para uso nos testes.
+    /// Cria um <see cref="Game"/> v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame() =>
-        new("Game Title", "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new("Game Title", "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
@@ -44,7 +44,7 @@ public class UpdateOrderStatusCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando o pedido n„o existe, o handler retorna false
+    /// Garante que, quando o pedido n√£o existe, o handler retorna false
     /// sem chamar Update nem SaveChangesAsync.
     /// </summary>
     [Fact]
@@ -64,7 +64,7 @@ public class UpdateOrderStatusCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando um status inv·lido/n„o mapeado È informado, o handler retorna false
+    /// Garante que, quando um status inv√°lido/n√£o mapeado √© informado, o handler retorna false
     /// sem chamar Update nem SaveChangesAsync.
     /// </summary>
     [Fact]
@@ -159,8 +159,8 @@ public class UpdateOrderStatusCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que aprovar um pedido j· aprovado lanÁa DomainException,
-    /// sem persistir a mudanÁa.
+    /// Garante que aprovar um pedido j√° aprovado lan√ßa DomainException,
+    /// sem persistir a mudan√ßa.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOrderAlreadyAprovado_ShouldThrowDomainException()
@@ -178,14 +178,14 @@ public class UpdateOrderStatusCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("O pedido j· foi aprovado.");
+            .WithMessage("O pedido j√° foi aprovado.");
 
         _orderRepositoryMock.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
     /// <summary>
-    /// Garante que rejeitar um pedido j· rejeitado lanÁa DomainException,
-    /// sem persistir a mudanÁa.
+    /// Garante que rejeitar um pedido j√° rejeitado lan√ßa DomainException,
+    /// sem persistir a mudan√ßa.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOrderAlreadyRejeitado_ShouldThrowDomainException()
@@ -203,14 +203,14 @@ public class UpdateOrderStatusCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("O pedido j· foi rejeitado.");
+            .WithMessage("O pedido j√° foi rejeitado.");
 
         _orderRepositoryMock.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
     /// <summary>
-    /// Garante que cancelar um pedido j· aprovado lanÁa DomainException,
-    /// sem persistir a mudanÁa.
+    /// Garante que cancelar um pedido j√° aprovado lan√ßa DomainException,
+    /// sem persistir a mudan√ßa.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOrderIsAprovadoAndCancelRequested_ShouldThrowDomainException()
@@ -228,7 +228,7 @@ public class UpdateOrderStatusCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("N„o È possÌvel cancelar pedidos j· processados.");
+            .WithMessage("N√£o √© poss√≠vel cancelar pedidos j√° processados.");
 
         _orderRepositoryMock.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }

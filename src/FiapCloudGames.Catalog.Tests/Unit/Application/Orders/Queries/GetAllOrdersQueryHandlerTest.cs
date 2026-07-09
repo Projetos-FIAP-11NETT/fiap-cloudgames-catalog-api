@@ -8,7 +8,7 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Orders.Queries;
 
 /// <summary>
-/// Testes unit·rios do GetAllOrdersQueryHandler, respons·vel por retornar
+/// Testes unit√°rios do GetAllOrdersQueryHandler, respons√°vel por retornar
 /// todos os pedidos mapeados para o DTO GetOrderResponse.
 /// </summary>
 public class GetAllOrdersQueryHandlerTest
@@ -22,14 +22,14 @@ public class GetAllOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Cria um Game v·lido para uso nos testes.
+    /// Cria um Game v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame(string title = "Game Title") =>
-        new(title, "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new(title, "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
-    /// Garante que, quando h· pedidos no repositÛrio, todos s„o retornados
+    /// Garante que, quando h√° pedidos no reposit√≥rio, todos s√£o retornados
     /// corretamente mapeados para GetOrderResponse.
     /// </summary>
     [Fact]
@@ -64,7 +64,7 @@ public class GetAllOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que os campos do DTO s„o mapeados corretamente a partir da entidade Order.
+    /// Garante que os campos do DTO s√£o mapeados corretamente a partir da entidade Order.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOrderExists_ShouldMapAllFieldsCorrectly()
@@ -94,7 +94,7 @@ public class GetAllOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma lista vazia È retornada quando n„o existem pedidos no repositÛrio.
+    /// Garante que uma lista vazia √© retornada quando n√£o existem pedidos no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenNoOrdersExist_ShouldReturnEmptyCollection()
@@ -112,7 +112,7 @@ public class GetAllOrdersQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que o repositÛrio È chamado exatamente uma vez por execuÁ„o do handler.
+    /// Garante que o reposit√≥rio √© chamado exatamente uma vez por execu√ß√£o do handler.
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCallRepositoryOnce()

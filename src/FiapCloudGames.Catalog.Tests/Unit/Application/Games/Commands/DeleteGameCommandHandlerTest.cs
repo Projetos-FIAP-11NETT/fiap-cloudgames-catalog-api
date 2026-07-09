@@ -9,8 +9,8 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Games.Commands;
 
 /// <summary>
-/// Testes unit·rios do DeleteGameCommandHandler, respons·vel por remover um jogo
-/// validando sua existÍncia, persistindo a remoÁ„o e invalidando o cache no Redis.
+/// Testes unit√°rios do DeleteGameCommandHandler, respons√°vel por remover um jogo
+/// validando sua exist√™ncia, persistindo a remo√ß√£o e invalidando o cache no Redis.
 /// </summary>
 public class DeleteGameCommandHandlerTest
 {
@@ -26,15 +26,15 @@ public class DeleteGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria um Game v·lido para uso nos testes.
+    /// Cria um Game v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame() =>
-        new("Game Title", "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new("Game Title", "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
-    /// Garante que, quando o jogo existe e SaveChanges È bem-sucedido, o jogo È removido,
-    /// o cache do Redis È invalidado e true È retornado.
+    /// Garante que, quando o jogo existe e SaveChanges √© bem-sucedido, o jogo √© removido,
+    /// o cache do Redis √© invalidado e true √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldRemoveGameAndInvalidateCacheAndReturnTrue()
@@ -65,8 +65,8 @@ public class DeleteGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma NotFoundException È lanÁada quando o jogo
-    /// informado no comando n„o existe no repositÛrio.
+    /// Garante que uma NotFoundException √© lan√ßada quando o jogo
+    /// informado no comando n√£o existe no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameNotFound_ShouldThrowNotFoundException()
@@ -91,8 +91,8 @@ public class DeleteGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o cache do Redis n„o È invalidado quando SaveChanges falha,
-    /// e false È retornado.
+    /// Garante que o cache do Redis n√£o √© invalidado quando SaveChanges falha,
+    /// e false √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldNotInvalidateCacheAndReturnFalse()
@@ -118,8 +118,8 @@ public class DeleteGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o Id do jogo removido È repassado corretamente ao Redis
-    /// para invalidaÁ„o das chaves de cache.
+    /// Garante que o Id do jogo removido √© repassado corretamente ao Redis
+    /// para invalida√ß√£o das chaves de cache.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldInvalidateCacheWithCorrectGameId()
@@ -148,7 +148,7 @@ public class DeleteGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o Id informado no comando È repassado corretamente ao repositÛrio
+    /// Garante que o Id informado no comando √© repassado corretamente ao reposit√≥rio
     /// para busca do jogo a ser removido.
     /// </summary>
     [Fact]
