@@ -69,6 +69,7 @@ jobs:
             $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Build Docker Image
+        working-directory: ${{ github.workspace }}
         run: |
           docker build \
             -f docker/dockerfile \
