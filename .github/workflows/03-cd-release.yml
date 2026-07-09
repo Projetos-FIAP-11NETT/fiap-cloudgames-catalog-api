@@ -1,0 +1,146 @@
+name: CD - Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
+  K8S_NAMESPACE: ${{ vars.K8S_NAMESPACE }}
+  IMAGE_TAG: ${{ github.ref_name }}
+
+jobs:
+
+  publish-image:
+
+    name: Build and Publish Image
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src
+    
+    steps:
+
+      - name: Checkout application
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore FiapCloudGames.Catalog.slnx
+
+      - name: Build
+        run: dotnet build FiapCloudGames.Catalog.slnx --configuration Release --no-restore
+
+      - name: Run Tests
+        run: >
+          dotnet test
+          FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj
+          --configuration Release
+          --no-build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | \
+          docker login \
+            --username AWS \
+            --password-stdin \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Build Docker Image
+        working-directory: ${{ github.workspace }}
+        run: |
+          docker build \
+            -f docker/dockerfile \
+            -t $ECR_REPOSITORY:$IMAGE_TAG \
+            -t $ECR_REPOSITORY:latest \
+            .
+
+      - name: Tag Docker Images
+        run: |
+
+          docker tag \
+            $ECR_REPOSITORY:$IMAGE_TAG \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+          docker tag \
+            $ECR_REPOSITORY:latest \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+
+      - name: Push Docker Images
+        run: |
+
+          docker push \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+          docker push \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+
+  deploy-eks:
+
+    name: Deploy to Amazon EKS
+    runs-on: ubuntu-latest
+
+    needs: publish-image
+
+    steps:
+
+      - name: Checkout Infrastructure
+        uses: actions/checkout@v4
+        with:
+          repository: Projetos-FIAP-11NETT/fiap-cloudgames-infrastructure
+          ref: feature/fase-4
+          path: infrastructure
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig \
+            --region $AWS_REGION \
+            --name $EKS_CLUSTER_NAME
+
+      - name: Check cluster connection
+        run: |
+          kubectl get nodes
+
+      - name: Apply Kubernetes Manifests
+        run: |
+          kubectl apply -R -f infrastructure/k8s/catalog
+
+      - name: Restart Deployment
+        run: |
+          kubectl rollout restart deployment/catalog-api \
+            --namespace $K8S_NAMESPACE
+
+      - name: Wait Rollout
+        run: |
+          kubectl rollout status deployment/catalog-api \
+            --namespace $K8S_NAMESPACE

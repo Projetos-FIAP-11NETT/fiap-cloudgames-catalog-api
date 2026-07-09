@@ -7,7 +7,7 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Categories.Queries;
 
 /// <summary>
-/// Testes unit·rios do GetCategoryQueryHandler, respons·vel por buscar categorias
+/// Testes unit√°rios do GetCategoryQueryHandler, respons√°vel por buscar categorias
 /// filtrando por Id e/ou Nome e mapeando os resultados para GetCategoryResponse.
 /// </summary>
 public class GetCategoryQueryHandlerTest
@@ -21,12 +21,12 @@ public class GetCategoryQueryHandlerTest
     }
 
     /// <summary>
-    /// Cria uma Category v·lida para uso nos testes.
+    /// Cria uma Category v√°lida para uso nos testes.
     /// </summary>
     private static Category CreateCategory(string name = "RPG") => new(name);
 
     /// <summary>
-    /// Garante que o Id e o Name da query s„o repassados corretamente ao repositÛrio.
+    /// Garante que o Id e o Name da query s√£o repassados corretamente ao reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCallRepositoryWithCorrectFilters()
@@ -48,7 +48,7 @@ public class GetCategoryQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que todos os campos do DTO s„o mapeados corretamente
+    /// Garante que todos os campos do DTO s√£o mapeados corretamente
     /// a partir da entidade Category.
     /// </summary>
     [Fact]
@@ -73,8 +73,8 @@ public class GetCategoryQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que todas as categorias retornadas pelo repositÛrio
-    /// s„o mapeadas para GetCategoryResponse.
+    /// Garante que todas as categorias retornadas pelo reposit√≥rio
+    /// s√£o mapeadas para GetCategoryResponse.
     /// </summary>
     [Fact]
     public async Task Handle_WhenMultipleCategoriesExist_ShouldReturnAllMappedResponses()
@@ -84,7 +84,7 @@ public class GetCategoryQueryHandlerTest
         {
             CreateCategory("RPG"),
             CreateCategory("Aventura"),
-            CreateCategory("EstratÈgia")
+            CreateCategory("Estrat√©gia")
         };
 
         var query = new GetCategoryQuery(null, null);
@@ -100,12 +100,12 @@ public class GetCategoryQueryHandlerTest
         var responses = result.ToList();
 
         responses.Should().HaveCount(3);
-        responses.Select(r => r.Name).Should().BeEquivalentTo(["RPG", "Aventura", "EstratÈgia"]);
+        responses.Select(r => r.Name).Should().BeEquivalentTo(["RPG", "Aventura", "Estrat√©gia"]);
     }
 
     /// <summary>
-    /// Garante que uma coleÁ„o vazia È retornada quando o repositÛrio
-    /// n„o encontra categorias para os filtros informados.
+    /// Garante que uma cole√ß√£o vazia √© retornada quando o reposit√≥rio
+    /// n√£o encontra categorias para os filtros informados.
     /// </summary>
     [Fact]
     public async Task Handle_WhenNoCategoriesFound_ShouldReturnEmptyCollection()
@@ -125,7 +125,7 @@ public class GetCategoryQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que a busca funciona corretamente quando apenas o Id È informado.
+    /// Garante que a busca funciona corretamente quando apenas o Id √© informado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOnlyIdProvided_ShouldCallRepositoryWithIdAndNullName()
@@ -149,7 +149,7 @@ public class GetCategoryQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que a busca funciona corretamente quando apenas o Name È informado.
+    /// Garante que a busca funciona corretamente quando apenas o Name √© informado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenOnlyNameProvided_ShouldCallRepositoryWithNullIdAndName()
@@ -173,7 +173,7 @@ public class GetCategoryQueryHandlerTest
     }
 
     /// <summary>
-    /// Garante que a busca funciona corretamente quando nenhum filtro È informado,
+    /// Garante que a busca funciona corretamente quando nenhum filtro √© informado,
     /// retornando todas as categorias.
     /// </summary>
     [Fact]
@@ -183,7 +183,7 @@ public class GetCategoryQueryHandlerTest
         var categories = new List<Category>
         {
             CreateCategory("RPG"),
-            CreateCategory("AÁ„o")
+            CreateCategory("A√ß√£o")
         };
 
         var query = new GetCategoryQuery(null, null);
