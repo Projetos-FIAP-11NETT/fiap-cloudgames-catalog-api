@@ -1,6 +1,8 @@
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Exceptions;
+using FiapCloudGames.Catalog.Domain.ReadModels;
 using MediatR;
 
 namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.UpdateGame;
@@ -9,7 +11,8 @@ public class UpdateGameCommandHandler
     (
         IGameRepository gameRepository,
         ICategoryRepository categoryRepository,
-        IRedisRepository redisRepository
+        IRedisRepository redisRepository,
+        IGameCatalogRepository gameCatalogRepository
     )
     : IRequestHandler<UpdateGameCommand, bool>
 {
@@ -41,7 +44,26 @@ public class UpdateGameCommandHandler
         var result = await gameRepository.SaveChangesAsync(cancellationToken);
 
         if (result)
+        {
             await redisRepository.RemoveKeysThatContainGameAsync(existingGame.Id, cancellationToken);
+
+            await gameCatalogRepository.UpsertAsync(
+                existingGame,
+                new GameCatalogMetadataReadModel
+                {
+                    Platforms = command.Metadata.Platforms,
+                    Tags = command.Metadata.Tags,
+                    AgeRating = command.Metadata.AgeRating,
+                    Languages = command.Metadata.Languages,
+                    Features = command.Metadata.Features
+                },
+                new GameCatalogRatingReadModel
+                {
+                    Average = command.Rating.Average,
+                    Count = command.Rating.Count
+                },
+                cancellationToken);
+        }
 
         return result;
     }
