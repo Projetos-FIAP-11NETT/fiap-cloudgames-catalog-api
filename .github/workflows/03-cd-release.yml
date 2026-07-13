@@ -137,10 +137,10 @@ jobs:
 
       - name: Restart Deployment
         run: |
-          kubectl rollout restart deployment/catalog-api \
+          kubectl rollout restart deployment/catalog-deployment \
             --namespace $K8S_NAMESPACE
 
       - name: Wait Rollout
         run: |
-          kubectl rollout status deployment/catalog-api \
+          kubectl rollout status deployment/catalog-deployment \
             --namespace $K8S_NAMESPACE
