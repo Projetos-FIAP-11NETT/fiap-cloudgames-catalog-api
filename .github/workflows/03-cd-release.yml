@@ -15,20 +15,23 @@ env:
   AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
   ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
   EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
-  K8S_NAMESPACE: ${{ vars.K8S_NAMESPACE }}
+
   IMAGE_TAG: ${{ github.ref_name }}
+
+  SERVICE_NAME: catalog
+  DEPLOYMENT_NAME: catalog-deployment
 
 jobs:
 
   publish-image:
 
-    name: Build and Publish Image
+    name: Build and Publish Docker Image
     runs-on: ubuntu-latest
 
     defaults:
       run:
         working-directory: src
-    
+
     steps:
 
       - name: Checkout application
@@ -79,7 +82,6 @@ jobs:
 
       - name: Tag Docker Images
         run: |
-
           docker tag \
             $ECR_REPOSITORY:$IMAGE_TAG \
             $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
@@ -90,7 +92,6 @@ jobs:
 
       - name: Push Docker Images
         run: |
-
           docker push \
             $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -131,16 +132,18 @@ jobs:
         run: |
           kubectl get nodes
 
-      - name: Apply Kubernetes Manifests
+      - name: Apply Catalog API Manifests
         run: |
-          kubectl apply -R -f infrastructure/k8s/catalog
+          kubectl apply -R -f infrastructure/$SERVICE_NAME/api
+
+      - name: Check Deployment
+        run: |
+          kubectl get deployment $DEPLOYMENT_NAME
 
       - name: Restart Deployment
         run: |
-          kubectl rollout restart deployment/catalog-deployment \
-            --namespace $K8S_NAMESPACE
+          kubectl rollout restart deployment/$DEPLOYMENT_NAME
 
       - name: Wait Rollout
         run: |
-          kubectl rollout status deployment/catalog-deployment \
-            --namespace $K8S_NAMESPACE
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
