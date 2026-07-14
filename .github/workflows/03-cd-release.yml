@@ -71,21 +71,14 @@ jobs:
             --password-stdin \
             $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
-      - name: Build Docker Image
-        working-directory: ${{ github.workspace }}
-        run: |
-          docker build \
-            -f docker/dockerfile \
-            -t $ECR_REPOSITORY:$IMAGE_TAG \
-            -t $ECR_REPOSITORY:latest \
-            .
-
-      - name: Install Trivy
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.66.0_Linux-64bit.deb
-          sudo dpkg -i trivy_0.66.0_Linux-64bit.deb
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.31.0
+        with:
+          image-ref: ${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '0'
 
       - name: Security Scan
         run: |
