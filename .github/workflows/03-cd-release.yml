@@ -134,7 +134,7 @@ jobs:
 
       - name: Apply Catalog API Manifests
         run: |
-          kubectl apply -R -f infrastructure/$SERVICE_NAME/api
+          kubectl apply -R -f infrastructure/k8s/$SERVICE_NAME/api
 
       - name: Check Deployment
         run: |
