@@ -80,6 +80,21 @@ jobs:
             -t $ECR_REPOSITORY:latest \
             .
 
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.66.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.66.0_Linux-64bit.deb
+
+      - name: Security Scan
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --exit-code 1 \
+            --no-progress \
+            $ECR_REPOSITORY:$IMAGE_TAG
+
       - name: Tag Docker Images
         run: |
           docker tag \
