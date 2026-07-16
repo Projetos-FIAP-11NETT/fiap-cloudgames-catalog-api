@@ -71,6 +71,9 @@ jobs:
             --password-stdin \
             $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
+      - name: List Docker Images
+        run: docker images
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
