@@ -9,8 +9,14 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
+
   build-and-test:
+
     name: Build and Test
     runs-on: ubuntu-latest
 
@@ -19,23 +25,58 @@ jobs:
         working-directory: src
 
     steps:
-      - name: Checkout code
+
+      - name: 01 - Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: 02 - Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+          cache: true
 
-      - name: Restore dependencies
+      - name: 03 - Restore dependencies
         run: dotnet restore FiapCloudGames.Catalog.slnx
 
-      - name: Build solution
+      - name: 04 - Build solution
         run: dotnet build FiapCloudGames.Catalog.slnx --configuration Release --no-restore
 
-      - name: Run unit tests
+      - name: 05 - Run unit tests
         run: >
           dotnet test
           FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj
           --configuration Release
           --no-build
+
+      - name: 06 - Check existing Pull Request
+        id: check-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+
+          PR_NUMBER=$(gh pr list \
+            --head "${{ github.ref_name }}" \
+            --base develop \
+            --state open \
+            --json number \
+            --jq '.[0].number')
+
+          echo "PR_NUMBER=$PR_NUMBER"
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "exists=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 07 - Create Pull Request
+        if: steps.check-pr.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+
+          gh pr create \
+            --base develop \
+            --head "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --body "Pull Request criado automaticamente pelo workflow CI - Push Validation."
