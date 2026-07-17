@@ -71,3 +71,4 @@ jobs:
             --head "${{ github.ref_name }}" \
             --title "feat: ${{ github.ref_name }}" \
             --body "PR criado automaticamente pelo CI."
+
