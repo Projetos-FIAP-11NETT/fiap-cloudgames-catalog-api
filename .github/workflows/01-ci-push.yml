@@ -47,35 +47,31 @@ jobs:
           --configuration Release
           --no-build
 
-      - name: 06 - Check existing Pull Request
-        id: check-pr
+      - name: Check if Pull Request already exists
+        id: pr
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-
           PR_NUMBER=$(gh pr list \
-            --head "${{ github.ref_name }}" \
             --base develop \
-            --state open \
+            --head "${{ github.ref_name }}" \
             --json number \
             --jq '.[0].number')
 
-          echo "PR_NUMBER=$PR_NUMBER"
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
-          if [ -z "$PR_NUMBER" ]; then
-            echo "exists=false" >> $GITHUB_OUTPUT
-          else
-            echo "exists=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 07 - Create Pull Request
-        if: steps.check-pr.outputs.exists == 'false'
+      - name: Create Pull Request
+        if: steps.pr.outputs.PR_NUMBER == ''
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-
           gh pr create \
             --base develop \
             --head "${{ github.ref_name }}" \
-            --title "${{ github.ref_name }}" \
-            --body "Pull Request criado automaticamente pelo workflow CI - Push Validation."
+            --title "feat: ${{ github.ref_name }}" \
+            --body "## Pull Request criado automaticamente
+
+      - name: Show Pull Request
+        if: steps.pr.outputs.PR_NUMBER != ''
+        run: |
+          echo "PR #${{ steps.pr.outputs.PR_NUMBER }} já existe."
