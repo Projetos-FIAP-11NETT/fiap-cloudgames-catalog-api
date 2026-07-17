@@ -50,7 +50,7 @@ jobs:
       - name: Check if Pull Request already exists
         id: pr
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER=$(gh pr list \
             --base develop \
@@ -60,18 +60,14 @@ jobs:
 
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
+
       - name: Create Pull Request
         if: steps.pr.outputs.PR_NUMBER == ''
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh pr create \
             --base develop \
             --head "${{ github.ref_name }}" \
             --title "feat: ${{ github.ref_name }}" \
-            --body "## Pull Request criado automaticamente
-
-      - name: Show Pull Request
-        if: steps.pr.outputs.PR_NUMBER != ''
-        run: |
-          echo "PR #${{ steps.pr.outputs.PR_NUMBER }} já existe."
+            --body "PR criado automaticamente pelo CI.
