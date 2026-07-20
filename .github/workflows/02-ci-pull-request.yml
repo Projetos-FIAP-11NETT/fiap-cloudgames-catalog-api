@@ -24,24 +24,21 @@ jobs:
 
     steps:
 
-      - name: Checkout code
+      - name: 01 - Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: 02 - Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore dependencies
+      - name: 03 - Restore dependencies
         run: dotnet restore FiapCloudGames.Catalog.slnx
 
-      - name: Build solution
+      - name: 04 - Build solution
         run: dotnet build FiapCloudGames.Catalog.slnx --configuration Release --no-restore
 
-      #- name: Verify code formatting
-        #run: dotnet format FiapCloudGames.Catalog.slnx --verify-no-changes
-
-      - name: Run tests with coverage
+      - name: 05 - Run tests with coverage
         run: >
           dotnet test
           FiapCloudGames.Catalog.Tests/FiapCloudGames.Catalog.Tests.csproj
@@ -49,7 +46,7 @@ jobs:
           --no-build
           --collect:"XPlat Code Coverage"
 
-      - name: Check vulnerable packages
+      - name: 06 - Check vulnerable packages
         shell: bash
         run: |
           dotnet package list --vulnerable > vulnerable.txt
@@ -61,7 +58,7 @@ jobs:
             exit 1
           fi
 
-      - name: Check outdated packages
+      - name: 07 - Check outdated packages
         shell: bash
         run: |
           dotnet package list --outdated > outdated.txt
