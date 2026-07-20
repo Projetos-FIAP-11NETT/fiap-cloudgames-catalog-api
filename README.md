@@ -72,7 +72,9 @@ cd src/FiapCloudGames.Catalog.Api
 dotnet run
 ```
 
-As variáveis de conexão podem ser ajustadas em `appsettings.json` ou via variáveis de ambiente.
+### Configuração de credenciais
+
+O projeto **não versiona variáveis de ambiente nem segredos**. Os valores sensíveis no `appsettings.json` ficam vazios e devem ser preenchidos localmente. Use o `appsettings.Example.json` como referência da estrutura e das chaves esperadas.
 
 ---
 
