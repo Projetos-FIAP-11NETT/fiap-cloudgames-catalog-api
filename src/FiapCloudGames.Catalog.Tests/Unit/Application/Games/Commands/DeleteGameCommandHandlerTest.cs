@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.DeleteGame;
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Entities;
@@ -16,13 +17,15 @@ public class DeleteGameCommandHandlerTest
 {
     private readonly Mock<IGameRepository> _gameRepositoryMock = new();
     private readonly Mock<IRedisRepository> _redisRepositoryMock = new();
+    private readonly Mock<IGameIndexPublisher> _gameIndexPublisherMock = new();
     private readonly DeleteGameCommandHandler _handler;
 
     public DeleteGameCommandHandlerTest()
     {
         _handler = new DeleteGameCommandHandler(
             _gameRepositoryMock.Object,
-            _redisRepositoryMock.Object);
+            _redisRepositoryMock.Object,
+            _gameIndexPublisherMock.Object);
     }
 
     /// <summary>

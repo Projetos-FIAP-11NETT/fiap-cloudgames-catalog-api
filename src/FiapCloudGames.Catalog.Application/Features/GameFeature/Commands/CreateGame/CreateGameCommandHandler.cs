@@ -1,4 +1,5 @@
-﻿using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
+﻿using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
 using MediatR;
@@ -7,8 +8,9 @@ namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.Creat
 
 public class CreateGameCommandHandler(
     IGameRepository gameRepository,
-    ICategoryRepository categoryRepository
-) 
+    ICategoryRepository categoryRepository,
+    IGameIndexPublisher gameIndexPublisher
+)
     : IRequestHandler<CreateGameCommand, bool>
 
 {
@@ -26,6 +28,11 @@ public class CreateGameCommandHandler(
             command.Developer, command.Price, categories);
 
         await gameRepository.AddAsync(game);
-        return await gameRepository.SaveChangesAsync(cancellationToken);
+        var result = await gameRepository.SaveChangesAsync(cancellationToken);
+
+        if (result)
+            await gameIndexPublisher.PublishUpsertedAsync(game, cancellationToken);
+
+        return result;
     }
 }

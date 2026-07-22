@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.UpdateGame;
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Entities;
@@ -18,6 +19,7 @@ public class UpdateGameCommandHandlerTest
     private readonly Mock<IGameRepository> _gameRepositoryMock = new();
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock = new();
     private readonly Mock<IRedisRepository> _redisRepositoryMock = new();
+    private readonly Mock<IGameIndexPublisher> _gameIndexPublisherMock = new();
     private readonly UpdateGameCommandHandler _handler;
 
     public UpdateGameCommandHandlerTest()
@@ -25,7 +27,8 @@ public class UpdateGameCommandHandlerTest
         _handler = new UpdateGameCommandHandler(
             _gameRepositoryMock.Object,
             _categoryRepositoryMock.Object,
-            _redisRepositoryMock.Object);
+            _redisRepositoryMock.Object,
+            _gameIndexPublisherMock.Object);
     }
 
     /// <summary>

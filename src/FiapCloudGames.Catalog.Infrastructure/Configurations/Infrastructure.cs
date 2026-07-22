@@ -10,6 +10,7 @@ public static class Infrastructure
         services.AddPostgres(configuration);
         services.AddMongoDb(configuration);
         services.AddRedis(configuration);
+        services.AddElasticsearch(configuration);
 
         return services;
     }
