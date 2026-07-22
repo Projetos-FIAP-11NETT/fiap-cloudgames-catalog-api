@@ -8,7 +8,7 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Categories.Commands;
 
 /// <summary>
-/// Testes unit·rios do CreateCategoryCommandHandler, respons·vel por criar categorias
+/// Testes unit√°rios do CreateCategoryCommandHandler, respons√°vel por criar categorias
 /// validando duplicidade pelo nome e persistindo o resultado.
 /// </summary>
 public class CreateCategoryCommandHandlerTest
@@ -22,8 +22,8 @@ public class CreateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que, quando o nome da categoria È ˙nico, a categoria È persistida
-    /// e true È retornado.
+    /// Garante que, quando o nome da categoria √© √∫nico, a categoria √© persistida
+    /// e true √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldCreateCategoryAndReturnTrue()
@@ -52,7 +52,7 @@ public class CreateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando j· existe uma categoria
+    /// Garante que uma BusinessException √© lan√ßada quando j√° existe uma categoria
     /// com o mesmo nome cadastrada.
     /// </summary>
     [Fact]
@@ -77,7 +77,7 @@ public class CreateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que false È retornado quando SaveChanges falha apÛs a criaÁ„o da categoria.
+    /// Garante que false √© retornado quando SaveChanges falha ap√≥s a cria√ß√£o da categoria.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldReturnFalse()
@@ -103,14 +103,14 @@ public class CreateCategoryCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o nome informado no comando È repassado corretamente
-    /// ‡ verificaÁ„o de duplicidade no repositÛrio.
+    /// Garante que o nome informado no comando √© repassado corretamente
+    /// √† verifica√ß√£o de duplicidade no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCheckDuplicityWithCorrectName()
     {
         // Arrange
-        var command = new CreateCategoryCommand("EstratÈgia");
+        var command = new CreateCategoryCommand("Estrat√©gia");
 
         _categoryRepositoryMock
             .Setup(r => r.AnyCategoryByNameAsync(command.Name))
@@ -122,11 +122,11 @@ public class CreateCategoryCommandHandlerTest
         // Assert
         await act.Should().ThrowAsync<BusinessException>();
 
-        _categoryRepositoryMock.Verify(r => r.AnyCategoryByNameAsync("EstratÈgia"), Times.Once);
+        _categoryRepositoryMock.Verify(r => r.AnyCategoryByNameAsync("Estrat√©gia"), Times.Once);
     }
 
     /// <summary>
-    /// Garante que a categoria adicionada ao repositÛrio È criada com
+    /// Garante que a categoria adicionada ao reposit√≥rio √© criada com
     /// o nome informado no comando.
     /// </summary>
     [Fact]

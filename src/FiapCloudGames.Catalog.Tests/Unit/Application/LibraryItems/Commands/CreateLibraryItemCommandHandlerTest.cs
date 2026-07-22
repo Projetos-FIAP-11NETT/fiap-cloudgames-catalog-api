@@ -10,9 +10,9 @@ using MongoDb = FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.LibraryItems.Commands;
 
 /// <summary>
-/// Testes unit·rios do CreateLibraryItemCommandHandler, respons·vel por adicionar
-/// um jogo ‡ biblioteca do usu·rio validando duplicidade, existÍncia do jogo,
-/// persistÍncia e notificaÁ„o por e-mail.
+/// Testes unit√°rios do CreateLibraryItemCommandHandler, respons√°vel por adicionar
+/// um jogo √† biblioteca do usu√°rio validando duplicidade, exist√™ncia do jogo,
+/// persist√™ncia e notifica√ß√£o por e-mail.
 /// </summary>
 public class CreateLibraryItemCommandHandlerTest
 {
@@ -32,14 +32,14 @@ public class CreateLibraryItemCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria um Game v·lido para uso nos testes.
+    /// Cria um Game v√°lido para uso nos testes.
     /// </summary>
     private static Game CreateGame() =>
-        new("Game Title", "DescriÁ„o v·lida do jogo para testes.", new DateTime(2020, 1, 1),
+        new("Game Title", "Descri√ß√£o v√°lida do jogo para testes.", new DateTime(2020, 1, 1),
             "Developer Studio", 59.90m, [new Category("RPG")]);
 
     /// <summary>
-    /// Cria um CreateLibraryItemCommand com valores padr„o.
+    /// Cria um CreateLibraryItemCommand com valores padr√£o.
     /// </summary>
     private static CreateLibraryItemCommand BuildCommand(Guid? userId = null, Guid? gameId = null) =>
         new(
@@ -50,8 +50,8 @@ public class CreateLibraryItemCommandHandlerTest
         );
 
     /// <summary>
-    /// Garante que, quando todos os dados s„o v·lidos e o item ainda n„o existe,
-    /// o item È salvo no Postgres, inserido no MongoDB e o e-mail È publicado,
+    /// Garante que, quando todos os dados s√£o v√°lidos e o item ainda n√£o existe,
+    /// o item √© salvo no Postgres, inserido no MongoDB e o e-mail √© publicado,
     /// retornando true.
     /// </summary>
     [Fact]
@@ -89,8 +89,8 @@ public class CreateLibraryItemCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que false È retornado imediatamente quando o item j· existe
-    /// na biblioteca do usu·rio, sem persistir ou publicar nada.
+    /// Garante que false √© retornado imediatamente quando o item j√° existe
+    /// na biblioteca do usu√°rio, sem persistir ou publicar nada.
     /// </summary>
     [Fact]
     public async Task Handle_WhenLibraryItemAlreadyExists_ShouldReturnFalseWithoutSideEffects()
@@ -114,8 +114,8 @@ public class CreateLibraryItemCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando o jogo
-    /// informado no comando n„o existe no repositÛrio.
+    /// Garante que uma BusinessException √© lan√ßada quando o jogo
+    /// informado no comando n√£o existe no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameNotFound_ShouldThrowBusinessException()
@@ -140,7 +140,7 @@ public class CreateLibraryItemCommandHandlerTest
 
     /// <summary>
     /// Garante que quando SaveChanges retorna false, o MongoDB e o e-mail
-    /// n„o s„o acionados.
+    /// n√£o s√£o acionados.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldNotInsertInMongoOrPublishEmail()
@@ -165,7 +165,7 @@ public class CreateLibraryItemCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o e-mail de notificaÁ„o contÈm o tÌtulo do jogo no corpo da mensagem.
+    /// Garante que o e-mail de notifica√ß√£o cont√©m o t√≠tulo do jogo no corpo da mensagem.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldPublishEmailWithGameTitleInBody()

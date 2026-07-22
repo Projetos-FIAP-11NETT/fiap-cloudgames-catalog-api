@@ -8,9 +8,9 @@ using Moq;
 namespace FiapCloudGames.Catalog.Tests.Unit.Application.Games.Commands;
 
 /// <summary>
-/// Testes unit·rios do CreateGameCommandHandler, respons·vel por criar jogos
-/// validando duplicidade por tÌtulo e desenvolvedor, obrigatoriedade de categorias,
-/// persistÍncia e retorno correto do resultado.
+/// Testes unit√°rios do CreateGameCommandHandler, respons√°vel por criar jogos
+/// validando duplicidade por t√≠tulo e desenvolvedor, obrigatoriedade de categorias,
+/// persist√™ncia e retorno correto do resultado.
 /// </summary>
 public class CreateGameCommandHandlerTest
 {
@@ -26,7 +26,7 @@ public class CreateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Cria um CreateGameCommand com valores padr„o.
+    /// Cria um CreateGameCommand com valores padr√£o.
     /// </summary>
     private static CreateGameCommand BuildCommand(
         string title = "Game Title",
@@ -34,7 +34,7 @@ public class CreateGameCommandHandlerTest
         List<Guid>? categories = null) =>
         new(
             Title: title,
-            Description: "DescriÁ„o v·lida do jogo para testes.",
+            Description: "Descri√ß√£o v√°lida do jogo para testes.",
             ReleaseDate: new DateTime(2020, 1, 1),
             Developer: developer,
             Price: 59.90m,
@@ -42,7 +42,7 @@ public class CreateGameCommandHandlerTest
         );
 
     /// <summary>
-    /// Cria uma lista de categorias v·lidas para uso nos testes.
+    /// Cria uma lista de categorias v√°lidas para uso nos testes.
     /// </summary>
     private static List<Category> CreateCategories(int count = 1) =>
         Enumerable.Range(1, count)
@@ -50,8 +50,8 @@ public class CreateGameCommandHandlerTest
             .ToList();
 
     /// <summary>
-    /// Garante que, quando todos os dados s„o v·lidos, o jogo È persistido
-    /// e true È retornado.
+    /// Garante que, quando todos os dados s√£o v√°lidos, o jogo √© persistido
+    /// e true √© retornado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenValid_ShouldCreateGameAndReturnTrue()
@@ -84,8 +84,8 @@ public class CreateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando j· existe um jogo
-    /// com o mesmo tÌtulo e desenvolvedor cadastrado.
+    /// Garante que uma BusinessException √© lan√ßada quando j√° existe um jogo
+    /// com o mesmo t√≠tulo e desenvolvedor cadastrado.
     /// </summary>
     [Fact]
     public async Task Handle_WhenGameAlreadyExists_ShouldThrowBusinessException()
@@ -102,7 +102,7 @@ public class CreateGameCommandHandlerTest
 
         // Assert
         await act.Should().ThrowAsync<BusinessException>()
-            .WithMessage("*tÌtulo*desenvolvedor*");
+            .WithMessage("*t√≠tulo*desenvolvedor*");
 
         _categoryRepositoryMock.Verify(r => r.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()), Times.Never);
         _gameRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Game>()), Times.Never);
@@ -110,8 +110,8 @@ public class CreateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que uma BusinessException È lanÁada quando nenhuma categoria
-    /// v·lida È encontrada para os IDs informados.
+    /// Garante que uma BusinessException √© lan√ßada quando nenhuma categoria
+    /// v√°lida √© encontrada para os IDs informados.
     /// </summary>
     [Fact]
     public async Task Handle_WhenNoCategoriesFound_ShouldThrowBusinessException()
@@ -138,7 +138,7 @@ public class CreateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que false È retornado quando SaveChanges falha apÛs a criaÁ„o do jogo.
+    /// Garante que false √© retornado quando SaveChanges falha ap√≥s a cria√ß√£o do jogo.
     /// </summary>
     [Fact]
     public async Task Handle_WhenSaveChangesFails_ShouldReturnFalse()
@@ -168,8 +168,8 @@ public class CreateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o jogo È criado com m˙ltiplas categorias quando todas
-    /// s„o encontradas no repositÛrio.
+    /// Garante que o jogo √© criado com m√∫ltiplas categorias quando todas
+    /// s√£o encontradas no reposit√≥rio.
     /// </summary>
     [Fact]
     public async Task Handle_WhenMultipleCategoriesProvided_ShouldCreateGameWithAllCategories()
@@ -203,8 +203,8 @@ public class CreateGameCommandHandlerTest
     }
 
     /// <summary>
-    /// Garante que o tÌtulo e desenvolvedor informados no comando s„o
-    /// passados corretamente para a verificaÁ„o de duplicidade.
+    /// Garante que o t√≠tulo e desenvolvedor informados no comando s√£o
+    /// passados corretamente para a verifica√ß√£o de duplicidade.
     /// </summary>
     [Fact]
     public async Task Handle_Always_ShouldCheckDuplicityWithCorrectTitleAndDeveloper()
