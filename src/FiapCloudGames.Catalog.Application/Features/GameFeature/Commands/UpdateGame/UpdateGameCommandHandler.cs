@@ -1,3 +1,4 @@
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Exceptions;
@@ -9,7 +10,8 @@ public class UpdateGameCommandHandler
     (
         IGameRepository gameRepository,
         ICategoryRepository categoryRepository,
-        IRedisRepository redisRepository
+        IRedisRepository redisRepository,
+        IGameIndexPublisher gameIndexPublisher
     )
     : IRequestHandler<UpdateGameCommand, bool>
 {
@@ -41,7 +43,10 @@ public class UpdateGameCommandHandler
         var result = await gameRepository.SaveChangesAsync(cancellationToken);
 
         if (result)
+        {
             await redisRepository.RemoveKeysThatContainGameAsync(existingGame.Id, cancellationToken);
+            await gameIndexPublisher.PublishUpsertedAsync(existingGame, cancellationToken);
+        }
 
         return result;
     }

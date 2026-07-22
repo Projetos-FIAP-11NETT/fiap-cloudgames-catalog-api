@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.CreateGame;
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
@@ -16,13 +17,15 @@ public class CreateGameCommandHandlerTest
 {
     private readonly Mock<IGameRepository> _gameRepositoryMock = new();
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock = new();
+    private readonly Mock<IGameIndexPublisher> _gameIndexPublisherMock = new();
     private readonly CreateGameCommandHandler _handler;
 
     public CreateGameCommandHandlerTest()
     {
         _handler = new CreateGameCommandHandler(
             _gameRepositoryMock.Object,
-            _categoryRepositoryMock.Object);
+            _categoryRepositoryMock.Object,
+            _gameIndexPublisherMock.Object);
     }
 
     /// <summary>

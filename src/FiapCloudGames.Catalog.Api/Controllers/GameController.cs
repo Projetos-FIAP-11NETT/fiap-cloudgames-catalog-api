@@ -2,6 +2,7 @@ using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.CreateGam
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.DeleteGame;
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.UpdateGame;
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Queries.GetGame;
+using FiapCloudGames.Catalog.Application.Features.GameFeature.Queries.SearchGames;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,14 @@ public class GameController
         {
             return NotFound();
         }
+        return Ok(result);
+    }
+
+    [HttpGet("search")]
+    [Authorize(Roles = "Admin,User")]
+    public async Task<IActionResult> SearchAsync([FromQuery] SearchGamesQuery query)
+    {
+        var result = await mediator.Send(query);
         return Ok(result);
     }
 
