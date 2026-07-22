@@ -28,11 +28,17 @@ public static class SqsStartup
 
                 cfg.Host(sqsSettings.Region, h =>
                 {
-                    h.AccessKey(sqsSettings.AccessKey);
-                    h.SecretKey(sqsSettings.SecretKey);
-
+                    // ServiceUrl setado = LocalStack, precisa de credenciais explicitas.
+                    // Sem ServiceUrl = AWS real: nao definir credenciais aqui deixa o
+                    // MassTransit cair no credential chain padrao do SDK (IAM role do
+                    // node via IMDS), que sao as unicas credenciais validas no AWS
+                    // Academy (as temporarias exigem session token, que AccessKey/SecretKey
+                    // fixos nao suportam).
                     if (!string.IsNullOrWhiteSpace(sqsSettings.ServiceUrl))
                     {
+                        h.AccessKey(sqsSettings.AccessKey);
+                        h.SecretKey(sqsSettings.SecretKey);
+
                         h.Config(new AmazonSQSConfig
                         {
                             ServiceURL = sqsSettings.ServiceUrl,
@@ -59,9 +65,19 @@ public static class SqsStartup
         services.AddSingleton<IAmazonSQS>(sp =>
         {
             var settings = sp.GetRequiredService<IOptions<SqsSettings>>().Value;
-            return new AmazonSQSClient(settings.AccessKey, settings.SecretKey, new AmazonSQSConfig
+
+            if (!string.IsNullOrWhiteSpace(settings.ServiceUrl))
             {
-                ServiceURL = settings.ServiceUrl,
+                return new AmazonSQSClient(settings.AccessKey, settings.SecretKey, new AmazonSQSConfig
+                {
+                    ServiceURL = settings.ServiceUrl,
+                    AuthenticationRegion = settings.Region
+                });
+            }
+
+            // AWS real: sem credenciais explicitas, usa a IAM role do node (LabRole) via IMDS.
+            return new AmazonSQSClient(new AmazonSQSConfig
+            {
                 AuthenticationRegion = settings.Region
             });
         });

@@ -15,7 +15,8 @@ public static class QueueConfig
         services.Configure<SqsSettings>(configuration.GetSection(nameof(SqsSettings)));
 
         services.AddScoped<IOrderPlacedPublisher, OrderPlacedPublisher>();
-        
+        services.AddScoped<IGameIndexPublisher, GameIndexPublisher>();
+
         services.RegisterSqsStartup();
 
         return services;
