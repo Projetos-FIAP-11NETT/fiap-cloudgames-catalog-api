@@ -1,5 +1,6 @@
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.CreateGame;
 using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
@@ -17,6 +18,7 @@ public class CreateGameCommandHandlerTest
 {
     private readonly Mock<IGameRepository> _gameRepositoryMock = new();
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock = new();
+    private readonly Mock<IGameCatalogRepository> _gameCatalogRepositoryMock = new();
     private readonly Mock<IGameIndexPublisher> _gameIndexPublisherMock = new();
     private readonly CreateGameCommandHandler _handler;
 
@@ -25,6 +27,7 @@ public class CreateGameCommandHandlerTest
         _handler = new CreateGameCommandHandler(
             _gameRepositoryMock.Object,
             _categoryRepositoryMock.Object,
+            _gameCatalogRepositoryMock.Object,
             _gameIndexPublisherMock.Object);
     }
 
@@ -37,11 +40,24 @@ public class CreateGameCommandHandlerTest
         List<Guid>? categories = null) =>
         new(
             Title: title,
-            Description: "Descrição válida do jogo para testes.",
+            Description: "Descricao valida do jogo para testes.",
             ReleaseDate: new DateTime(2020, 1, 1),
             Developer: developer,
             Price: 59.90m,
-            Categories: categories ?? [Guid.NewGuid()]
+            Categories: categories ?? [Guid.NewGuid()],
+            Metadata: new GameCatalogMetadataCommand
+            {
+                Platforms = ["PC", "PlayStation 5"],
+                Tags = ["RPG", "Action"],
+                AgeRating = "12",
+                Languages = ["pt-BR", "en-US"],
+                Features = ["Single-player"]
+            },
+            Rating: new GameCatalogRatingCommand
+            {
+                Average = 4.5,
+                Count = 10
+            }
         );
 
     /// <summary>

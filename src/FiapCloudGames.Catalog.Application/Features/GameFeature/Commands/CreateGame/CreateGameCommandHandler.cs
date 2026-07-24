@@ -1,7 +1,9 @@
 ﻿using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Domain.Exceptions;
+using FiapCloudGames.Catalog.Domain.ReadModels;
 using MediatR;
 
 namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.CreateGame;
@@ -9,6 +11,7 @@ namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.Creat
 public class CreateGameCommandHandler(
     IGameRepository gameRepository,
     ICategoryRepository categoryRepository,
+    IGameCatalogRepository gameCatalogRepository,
     IGameIndexPublisher gameIndexPublisher
 )
     : IRequestHandler<CreateGameCommand, bool>
@@ -28,10 +31,29 @@ public class CreateGameCommandHandler(
             command.Developer, command.Price, categories);
 
         await gameRepository.AddAsync(game);
+
         var result = await gameRepository.SaveChangesAsync(cancellationToken);
 
         if (result)
+        {
+            await gameCatalogRepository.UpsertAsync(
+                game,
+                new GameCatalogMetadataReadModel
+                {
+                    Platforms = command.Metadata.Platforms,
+                    Tags = command.Metadata.Tags,
+                    AgeRating = command.Metadata.AgeRating,
+                    Languages = command.Metadata.Languages,
+                    Features = command.Metadata.Features
+                },
+                new GameCatalogRatingReadModel
+                {
+                    Average = command.Rating.Average,
+                    Count = command.Rating.Count
+                },
+                cancellationToken);
             await gameIndexPublisher.PublishUpsertedAsync(game, cancellationToken);
+        }
 
         return result;
     }

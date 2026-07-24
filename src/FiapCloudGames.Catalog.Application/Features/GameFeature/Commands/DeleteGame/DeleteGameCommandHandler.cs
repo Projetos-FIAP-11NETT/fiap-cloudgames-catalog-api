@@ -1,4 +1,5 @@
 using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Exceptions;
@@ -10,6 +11,7 @@ public class DeleteGameCommandHandler
     (
         IGameRepository gameRepository,
         IRedisRepository redisRepository,
+        IGameCatalogRepository gameCatalogRepository,
         IGameIndexPublisher gameIndexPublisher
     )
     : IRequestHandler<DeleteGameCommand, bool>
@@ -27,6 +29,7 @@ public class DeleteGameCommandHandler
         if (result)
         {
             await redisRepository.RemoveKeysThatContainGameAsync(existingGame.Id, cancellationToken);
+            await gameCatalogRepository.DeleteAsync(existingGame.Id, cancellationToken);
             await gameIndexPublisher.PublishDeletedAsync(existingGame.Id, cancellationToken);
         }
 

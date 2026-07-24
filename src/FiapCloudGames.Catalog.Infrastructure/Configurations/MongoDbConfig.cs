@@ -19,6 +19,8 @@ public static class MongoDbConfig
         services.AddSingleton<MongoDbContext>();
         
         services.AddScoped<ILibraryItemRepository, LibraryItemRepository>();
+        services.AddScoped<IRequestLogRepository, RequestLogRepository>();
+        services.AddScoped<IGameCatalogRepository, GameCatalogRepository>();
 
         return services;
     }
