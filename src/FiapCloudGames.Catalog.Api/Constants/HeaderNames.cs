@@ -3,4 +3,5 @@
 public static class HeaderNames
 {
     public const string CorrelationId = "X-Correlation-ID";
+    public const string SessionId = "X-Session-Id";
 }
