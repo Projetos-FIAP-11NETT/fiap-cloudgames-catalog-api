@@ -36,7 +36,7 @@ public class CreateLibraryItemCommandHandler(
             await emailNotificationPublisher.PublishAsync(
                 to: command.Email,
                 subject: "Novo item adicionado à sua biblioteca",
-                body: $"Jogo {game.Title} adicionado à sua biblioteca.",
+                body: $"Jogo {game.Title} adicionado à sua biblioteca. Divirta-se! :D",
                 cancellationToken: cancellationToken);
         }
 
