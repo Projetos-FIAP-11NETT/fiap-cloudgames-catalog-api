@@ -10,7 +10,7 @@ API REST para gerenciamento do catálogo de jogos da plataforma FiapCloudGames. 
 |---|---|
 | Runtime | .NET 10 / ASP.NET Core |
 | Autenticação | JWT Bearer + Firebase |
-| Banco de dados | PostgreSQL (EF Core) · MongoDB · Redis |
+| Banco de dados | PostgreSQL (EF Core) · MongoDB · Redis · Elasticsearch |
 | Mensageria | MassTransit + RabbitMQ / Amazon SQS |
 | Observabilidade | Serilog · New Relic APM |
 | Testes | xUnit · Moq · FluentAssertions |
@@ -42,10 +42,22 @@ Todos os endpoints exigem autenticação JWT. Operações de escrita no catálog
 |---|---|---|
 | Categorias | `GET/POST/PUT/DELETE /api/v1/category` | CRUD de categorias |
 | Jogos | `GET/POST/PUT/DELETE /api/v1/game` | CRUD de jogos |
+| Busca avançada | `GET /api/v1/game/search` | Busca fuzzy por título/descrição via **Elasticsearch** |
+| Catálogo | `GET /api/v1/game/catalog` | Listagem paginada do catálogo |
 | Pedidos | `GET/POST /api/v1/order` | Compra e consulta de pedidos |
 | Biblioteca | `GET /api/v1/library` | Jogos adquiridos pelo usuário |
 
 Documentação interativa disponível em `/swagger` quando em ambiente de desenvolvimento.
+
+---
+
+## Busca avançada (Elasticsearch)
+
+O endpoint `/api/v1/game/search` roda **independente** da consulta relacional (Postgres), usando um índice dedicado no Elasticsearch com tolerância a erro de digitação (fuzzy search).
+
+- **Cliente:** `Elastic.Clients.Elasticsearch` (client oficial).
+- **Indexação assíncrona:** os comandos `Create`/`Update`/`Delete` de jogo publicam eventos (`IGameUpserted` / delete) via MassTransit; o `GameIndexConsumer` (em `FiapCloudGames.Queue`) consome o evento e atualiza o documento no índice (`GameSearchRepository` / `GameDocument`), mantendo o índice sincronizado sem acoplar a escrita no Postgres à disponibilidade do Elasticsearch.
+- **Configuração:** `ElasticsearchSettings` (`Uri`, `IndexName`) via `appsettings` / variáveis de ambiente — sem credenciais hardcoded.
 
 ---
 
