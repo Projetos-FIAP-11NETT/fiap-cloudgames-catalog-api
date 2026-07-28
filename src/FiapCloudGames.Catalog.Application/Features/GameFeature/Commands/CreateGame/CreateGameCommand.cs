@@ -4,6 +4,13 @@ namespace FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.Creat
 
 public sealed record class CreateGameCommand
 (
-    string Title, string Description, DateTime ReleaseDate, string Developer, decimal Price, List<Guid> Categories
-) 
+    string Title,
+    string Description,
+    DateTime ReleaseDate,
+    string Developer,
+    decimal Price,
+    List<Guid> Categories,
+    GameCatalogMetadataCommand Metadata,
+    GameCatalogRatingCommand Rating
+)
     : IRequest<bool>;

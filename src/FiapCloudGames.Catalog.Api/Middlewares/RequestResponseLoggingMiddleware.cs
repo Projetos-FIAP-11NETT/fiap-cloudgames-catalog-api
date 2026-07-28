@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
-using FiapCloudGames.Catalog.Api.Constants;
+﻿using FiapCloudGames.Catalog.Api.Constants;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
+using FiapCloudGames.Catalog.Domain.Entities;
 using FiapCloudGames.Catalog.Observability.Abstractions;
+using System.Diagnostics;
 using LogContext = Serilog.Context.LogContext;
 
 namespace FiapCloudGames.Catalog.Api.Middlewares;
@@ -11,7 +13,7 @@ public sealed class RequestResponseLoggingMiddleware(RequestDelegate _next, ILog
     private const string MessageResponse = "[catalog-service] CorrelationId: {CorrelationId} | Final da Requisicao {Method} {Path} | StatusCode: {StatusCode} {Elapsed}ms";
 
 
-    public async Task InvokeAsync(HttpContext context, IObservabilityService observabilityService)
+    public async Task InvokeAsync(HttpContext context, IObservabilityService observabilityService, IRequestLogRepository requestLogRepository)
     {
         // CorrelationId
         var correlationId = GetOrCreateCorrelationId(context);
@@ -38,6 +40,19 @@ public sealed class RequestResponseLoggingMiddleware(RequestDelegate _next, ILog
             }
             stopwatch.Stop();
 
+            var requestLog = new RequestLog
+            {
+                CorrelationId = correlationId,
+                Method = context.Request.Method,
+                Path = context.Request.Path,
+                StatusCode = context.Response.StatusCode,
+                ElapsedMilliseconds = stopwatch.ElapsedMilliseconds,
+                UserId = context.User?.Identity?.Name,
+                IpAddress = context.Connection.RemoteIpAddress?.ToString(),
+                UserAgent = context.Request.Headers.UserAgent.ToString(),
+                CreatedAt = DateTime.UtcNow
+            };
+            await requestLogRepository.InsertAsync(requestLog, context.RequestAborted);
             _logger.LogInformation(MessageResponse, correlationId, context.Request.Method, context.Request.Path, context.Response.StatusCode, stopwatch.ElapsedMilliseconds);
         }
     }

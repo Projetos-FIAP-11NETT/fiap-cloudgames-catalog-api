@@ -1,4 +1,7 @@
+using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.CreateGame;
 using FiapCloudGames.Catalog.Application.Features.GameFeature.Commands.UpdateGame;
+using FiapCloudGames.Catalog.Domain.Contracts.Publishers;
+using FiapCloudGames.Catalog.Domain.Contracts.Repositories.MongoDb;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Postgres;
 using FiapCloudGames.Catalog.Domain.Contracts.Repositories.Redis;
 using FiapCloudGames.Catalog.Domain.Entities;
@@ -18,6 +21,8 @@ public class UpdateGameCommandHandlerTest
     private readonly Mock<IGameRepository> _gameRepositoryMock = new();
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock = new();
     private readonly Mock<IRedisRepository> _redisRepositoryMock = new();
+    private readonly Mock<IGameCatalogRepository> _gameCatalogRepositoryMock = new();
+    private readonly Mock<IGameIndexPublisher> _gameIndexPublisherMock = new();
     private readonly UpdateGameCommandHandler _handler;
 
     public UpdateGameCommandHandlerTest()
@@ -25,7 +30,9 @@ public class UpdateGameCommandHandlerTest
         _handler = new UpdateGameCommandHandler(
             _gameRepositoryMock.Object,
             _categoryRepositoryMock.Object,
-            _redisRepositoryMock.Object);
+            _redisRepositoryMock.Object,
+            _gameCatalogRepositoryMock.Object,
+            _gameIndexPublisherMock.Object);
     }
 
     /// <summary>
@@ -46,11 +53,24 @@ public class UpdateGameCommandHandlerTest
         new(
             Id: id ?? Guid.NewGuid(),
             Title: title,
-            Description: "Descrição atualizada do jogo.",
-            ReleaseDate: new DateTime(2021, 6, 1),
+            Description: "Descricao valida do jogo para testes.",
+            ReleaseDate: new DateTime(2020, 1, 1),
             Developer: developer,
-            Price: 79.90m,
-            Categories: categories ?? [Guid.NewGuid()]
+            Price: 59.90m,
+            Categories: categories ?? [Guid.NewGuid()],
+            Metadata: new GameCatalogMetadataCommand
+            {
+                Platforms = ["PC", "PlayStation 5"],
+                Tags = ["RPG", "Action"],
+                AgeRating = "12",
+                Languages = ["pt-BR", "en-US"],
+                Features = ["Single-player"]
+            },
+            Rating: new GameCatalogRatingCommand
+            {
+                Average = 4.5,
+                Count = 10
+            }
         );
 
     /// <summary>
